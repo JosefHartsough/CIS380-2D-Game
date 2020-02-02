@@ -47,7 +47,6 @@ def main():
     e.events[pygame.USEREVENT + 1] = q.move_right
     e.events[pygame.QUIT] = e.stop
 
-
     e.run()
 
 if __name__ =='__main__':
