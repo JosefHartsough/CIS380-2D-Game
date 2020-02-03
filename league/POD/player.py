@@ -45,8 +45,7 @@ class Player(Character):
         self.overlay = self.font.render(str(self.health) + "        4 lives", True, (0,0,0))
 
     def move_left(self, time):
-        self.image = pygame.image.load('./assets/sword_ninja_left.png').convert_alpha()
-        self.image = pygame.transform.scale(self.image, (64, 64))
+        self.update_picture('sword_ninja_left.png')
         self.collisions = []
         amount = self.delta * time
         try:
@@ -62,8 +61,7 @@ class Player(Character):
             pass
 
     def move_right(self, time):
-        self.image = pygame.image.load('./assets/vampire.png').convert_alpha()
-        self.image = pygame.transform.scale(self.image, (64, 64))
+        self.update_picture('vampire.png')
         self.collisions = []
         amount = self.delta * time
         try:
@@ -79,8 +77,7 @@ class Player(Character):
             pass
 
     def move_up(self, time):
-        self.image = pygame.image.load('./assets/zombie_up.png').convert_alpha()
-        self.image = pygame.transform.scale(self.image, (64, 64))
+        self.update_picture('zombie_up.png')
         self.collisions = []
         amount = self.delta * time
         try:
@@ -97,8 +94,7 @@ class Player(Character):
             pass
 
     def move_down(self, time):
-        self.image = pygame.image.load('./assets/elf_going_down.png').convert_alpha()
-        self.image = pygame.transform.scale(self.image, (64, 64))
+        self.update_picture('elf_going_down.png')
         self.collisions = []
         amount = self.delta * time
         try:
@@ -129,3 +125,7 @@ class Player(Character):
         if now - self.last_hit > 1000:
             self.health = self.health - 10
             self.last_hit = now
+
+    def update_picture(self, image):
+        self.image = pygame.image.load(f'./assets/{image}').convert_alpha()
+        self.image = pygame.transform.scale(self.image, (64, 64))

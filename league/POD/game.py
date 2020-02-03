@@ -7,47 +7,58 @@ from overlay import Overlay
 
 
 def main():
-    e = league.Engine("Path of Darkness")
-    e.init_pygame()
+    engine = league.Engine("Path of Darkness")
+    engine.init_pygame()
 
+    # Load the assets
     sprites = league.Spritesheet('./assets/sprite1.png', league.Settings.tile_size, 32)
-    t = league.Tilemap('./assets/world.lvl', sprites, layer = 0)
-    b = league.Tilemap('./assets/background.lvl', sprites, layer = 1)
-    s = league.Tilemap('./assets/layer2.lvl', sprites, layer = 2)
-    world_size = (t.wide*league.Settings.tile_size, t.high *league.Settings.tile_size)
-    e.drawables.add(t.passable.sprites())
-    e.drawables.add(b.passable.sprites())
-    e.drawables.add(s.passable.sprites())
+    world_lvl_asset = league.Tilemap('./assets/world.lvl', sprites, layer = 0)
+    background_lvl_asset = league.Tilemap('./assets/background.lvl', sprites, layer = 1)
+    layer_2_lvl_asset = league.Tilemap('./assets/layer2.lvl', sprites, layer = 2)
 
-    # ira's code
-    p = Player(2, 400, 300)
-    o = Overlay(p)
-    p.blocks.add(t.impassable)
-    p.world_size = world_size
-    p.rect = p.image.get_rect()
-    q = Player(10, 100, 100)
-    q.image = p.image
-    e.objects.append(p)
-    e.objects.append(q)
-    e.drawables.add(p)
-    e.drawables.add(q)
-    e.drawables.add(o)
-    c = league.LessDumbCamera(800, 600, p, e.drawables, world_size)
-    #c = league.DumbCamera(800, 600, p, e.drawables, world_size)
+    # set the world size
+    world_size = (world_lvl_asset.wide*league.Settings.tile_size, world_lvl_asset.high *league.Settings.tile_size)
 
-    e.objects.append(c)
-    e.objects.append(o)
+    # Tell the engine about the assets created
+    engine.drawables.add(world_lvl_asset.passable.sprites())
+    engine.drawables.add(background_lvl_asset.passable.sprites())
+    engine.drawables.add(layer_2_lvl_asset.passable.sprites())
 
-    e.collisions[p] = (q, p.ouch)
+    # Create the player and give him a position and overlay
+    player = Player(200, 400, 300)
+    player_overlay = Overlay(player)
+
+    # The assets the player can not go through
+    player.blocks.add(world_lvl_asset.impassable)
+    player.blocks.add(background_lvl_asset.impassable)
+    player.blocks.add(layer_2_lvl_asset.impassable)
+
+    # Set sizing options for the player
+    player.world_size = world_size
+    player.rect = player.image.get_rect()
+
+    # Add the player to the engine
+    engine.objects.append(player)
+    engine.drawables.add(player)
+    engine.drawables.add(player_overlay)
+
+    # create the camera and add it to the engine
+    camera = league.LessDumbCamera(800, 600, player, engine.drawables, world_size)
+    # camera = league.DumbCamera(800, 600, player, engine.drawables, world_size)
+    engine.objects.append(camera)
+    engine.objects.append(player_overlay)
+
+    # look for different events in the game and call their methods
+    # engine.collisions[player] = (q, player.ouch)
     pygame.time.set_timer(pygame.USEREVENT + 1, 1000 // league.Settings.gameTimeFactor)
-    e.key_events[pygame.K_a] = p.move_left
-    e.key_events[pygame.K_d] = p.move_right
-    e.key_events[pygame.K_w] = p.move_up
-    e.key_events[pygame.K_s] = p.move_down
-    e.events[pygame.USEREVENT + 1] = q.move_right
-    e.events[pygame.QUIT] = e.stop
+    engine.key_events[pygame.K_a] = player.move_left
+    engine.key_events[pygame.K_d] = player.move_right
+    engine.key_events[pygame.K_w] = player.move_up
+    engine.key_events[pygame.K_s] = player.move_down
+    # engine.events[pygame.USEREVENT + 1] = q.move_right
+    engine.events[pygame.QUIT] = engine.stop
 
-    e.run()
+    engine.run()
 
 if __name__ =='__main__':
     main()
