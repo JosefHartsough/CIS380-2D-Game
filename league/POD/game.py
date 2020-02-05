@@ -4,6 +4,7 @@ sys.path.append('..')
 import league
 from player import Player
 from overlay import Overlay
+from npc import Npc
 
 
 def main():
@@ -28,6 +29,10 @@ def main():
     player = Player(200, 400, 300)
     player_overlay = Overlay(player)
 
+    # Create npc and give position
+    npcBlacksmith = Npc(400, 500, 300)
+
+
     # The assets the player can not go through
     player.blocks.add(world_lvl_asset.impassable)
     player.blocks.add(background_lvl_asset.impassable)
@@ -37,10 +42,16 @@ def main():
     player.world_size = world_size
     player.rect = player.image.get_rect()
 
+
     # Add the player to the engine
     engine.objects.append(player)
+    engine.objects.append(npcBlacksmith)
     engine.drawables.add(player)
     engine.drawables.add(player_overlay)
+
+    # Add the NPC to the engine
+    # engine.objects.append(npcBlacksmith)
+    engine.drawables.add(npcBlacksmith)
 
     # create the camera and add it to the engine
     camera = league.LessDumbCamera(800, 600, player, engine.drawables, world_size)
@@ -50,6 +61,7 @@ def main():
 
     # look for different events in the game and call their methods
     # engine.collisions[player] = (q, player.ouch)
+    engine.collisions[npcBlacksmith] = (player, player.ouch)
     pygame.time.set_timer(pygame.USEREVENT + 1, 1000 // league.Settings.gameTimeFactor)
     engine.key_events[pygame.K_a] = player.move_left
     engine.key_events[pygame.K_d] = player.move_right
