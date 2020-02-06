@@ -22,6 +22,8 @@ class Player(Character):
         # Where the player is positioned
         self.x = x
         self.y = y
+
+        # these are the rows on the spire sheet that correspond with him walking
         self.up_walk_const = 8
         self.left_walk_const = 9
         self.down_walk_const = 10
@@ -33,22 +35,25 @@ class Player(Character):
         self.state = Player_State.IDLE
         self.images = {}
         self.frame = 0
-        self.bla = pygame.image.load("./assets/zombie.png").convert_alpha()
 
-        # beginning look of our player
-        loc_in_sprite_sheet = self.pull_sprite(0, 0)
+        # Load in all of the pictures required for moving
+        # The animate functions return a hash and so the first call to self.images
+        # needs to create the hash on this side to allow for it. The other calls
+        # to the animate functions simply need to add onto the hash and in python
+        # that is done by the update() method.
         self.images[Player_State.WALK] = self.animate_move_left()
         self.images[Player_State.WALK].update(self.animate_move_right())
         self.images[Player_State.WALK].update(self.animate_move_up())
         self.images[Player_State.WALK].update(self.animate_move_down())
 
-        pp = pprint.PrettyPrinter(indent=1)
-        print("self.images\n")
-        pp.pprint(self.images)
+        # This is how our man spawns in.
+        loc_in_sprite_sheet = self.pull_sprite(2, 0)
         self.update_sprite(loc_in_sprite_sheet)
 
-        # self.image = pygame.image.load('./assets/zombie.png').convert_alpha()
-        # self.image = pygame.transform.scale(self.image, (64, 64))
+        pp = pprint.PrettyPrinter(indent=1)
+        print("\nThe multi-leveled hash of our pictures")
+        pp.pprint(self.images)
+
         self.rect = self.image.get_rect()
         # How big the world is, so we can check for boundries
         self.world_size = (Settings.width, Settings.height)
@@ -75,8 +80,6 @@ class Player(Character):
         images = {}
         for x in range(0, 8):
             range_of_motion.append(self.pull_sprite(self.left_walk_const, x))
-
-        print("range_of_motion", range_of_motion)
         images[Direction.WEST] = range_of_motion
         return images
 
@@ -85,8 +88,6 @@ class Player(Character):
         images = {}
         for x in range(0, 8):
             range_of_motion.append(self.pull_sprite(self.right_walk_const, x))
-
-        print("range_of_motion", range_of_motion)
         images[Direction.EAST] = range_of_motion
         return images
 
@@ -95,8 +96,6 @@ class Player(Character):
         images = {}
         for x in range(0, 8):
             range_of_motion.append(self.pull_sprite(self.up_walk_const, x))
-
-        print("range_of_motion", range_of_motion)
         images[Direction.NORTH] = range_of_motion
         return images
 
@@ -105,8 +104,6 @@ class Player(Character):
         images = {}
         for x in range(0, 8):
             range_of_motion.append(self.pull_sprite(self.down_walk_const, x))
-
-        print("range_of_motion", range_of_motion)
         images[Direction.SOUTH] = range_of_motion
         return images
 
@@ -115,12 +112,7 @@ class Player(Character):
         amount = self.delta * time
         self.state = Player_State.WALK
         self.direction = Direction.WEST
-
-        screen = pygame.display.set_mode((Settings.width, Settings.height))
-        screen.blit(self.bla, (0,0))
-        pygame.display.update()
-        # pygame.draw.rect(screen, [255, 255, 255], (self.x, self.y, 62, 62))
-        screen.blit(self.bla, (self.x, self.y), pygame.Rect(self.x, self.y, 62, 62))
+        self.image = pygame.Surface((self.tile_size, self.tile_size), pygame.SRCALPHA).convert_alpha()
         try:
             if self.x - amount < 0:
                 raise OffScreenLeftException
@@ -128,7 +120,6 @@ class Player(Character):
                 self.x = self.x - amount
                 self.update(0)
                 self.frame = (self.frame + 1) % Settings.fps
-                print("stuff", self.images[self.state][self.direction][self.frame % 8])
                 self.update_sprite(self.images[self.state][self.direction][self.frame % 8])
                 while(len(self.collisions) != 0):
                     self.x = self.x + amount
@@ -141,6 +132,7 @@ class Player(Character):
         amount = self.delta * time
         self.state = Player_State.WALK
         self.direction = Direction.EAST
+        self.image = pygame.Surface((self.tile_size, self.tile_size), pygame.SRCALPHA).convert_alpha()
         try:
             if self.x + amount > self.world_size[0] - Settings.tile_size:
                 raise OffScreenRightException
@@ -148,7 +140,6 @@ class Player(Character):
                 self.x = self.x + amount
                 self.update(0)
                 self.frame = (self.frame + 1) % Settings.fps
-                print("stuff", self.images[self.state][self.direction][self.frame % 8])
                 self.update_sprite(self.images[self.state][self.direction][self.frame % 8])
                 while(len(self.collisions) != 0):
                     self.x = self.x - amount
@@ -161,6 +152,7 @@ class Player(Character):
         amount = self.delta * time
         self.state = Player_State.WALK
         self.direction = Direction.NORTH
+        self.image = pygame.Surface((self.tile_size, self.tile_size), pygame.SRCALPHA).convert_alpha()
         try:
             if self.y - amount < 0:
                 raise OffScreenTopException
@@ -168,7 +160,6 @@ class Player(Character):
                 self.y = self.y - amount
                 self.update(0)
                 self.frame = (self.frame + 1) % Settings.fps
-                print("stuff", self.images[self.state][self.direction][self.frame % 8])
                 self.update_sprite(self.images[self.state][self.direction][self.frame % 8])
                 if len(self.collisions) != 0:
                     self.y = self.y + amount
@@ -182,6 +173,7 @@ class Player(Character):
         amount = self.delta * time
         self.state = Player_State.WALK
         self.direction = Direction.SOUTH
+        self.image = pygame.Surface((self.tile_size, self.tile_size), pygame.SRCALPHA).convert_alpha()
         try:
             if self.y + amount > self.world_size[1] - Settings.tile_size:
                 raise OffScreenBottomException
@@ -189,7 +181,6 @@ class Player(Character):
                 self.y = self.y + amount
                 self.update(0)
                 self.frame = (self.frame + 1) % Settings.fps
-                print("stuff", self.images[self.state][self.direction][self.frame % 8])
                 self.update_sprite(self.images[self.state][self.direction][self.frame % 8])
                 if len(self.collisions) != 0:
                     self.y = self.y - amount
@@ -218,7 +209,7 @@ class Player(Character):
         # pygame.display.update()
         self.image.blit(self.sheet, (0, 0), (loc[0], loc[1], loc[0] + self.tile_size, loc[1] + self.tile_size))
 
-    def pull_sprite(self, row, index, max_row_length = 13, num_rows = 20, file = "example_dude.png"):
+    def pull_sprite(self, row, index, max_row_length = 13, num_rows = 20, file = "player.png"):
         # create data structure to hold sprite images and for easier math
         all_sprite_pictures = []
         value_for_rows = 0
