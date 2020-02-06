@@ -4,7 +4,7 @@ sys.path.append('..')
 import league
 from player import Player
 from overlay import Overlay
-from npc import Npc
+from blacksmith import Npc
 
 
 def main():
@@ -30,7 +30,7 @@ def main():
     player_overlay = Overlay(player)
 
     # Create npc and give position
-    npcBlacksmith = Npc(400, 500, 300)
+    npcBlacksmith = Npc(2, 100, 500)
 
     # The assets the player can not go through
     player.blocks.add(world_lvl_asset.impassable)
@@ -58,7 +58,7 @@ def main():
 
     # look for different events in the game and call their methods
     # engine.collisions[player] = (q, player.ouch)
-    engine.collisions[npcBlacksmith] = (player, player.ouch)
+    engine.collisions[player] = (npcBlacksmith, npcBlacksmith.interact)
     pygame.time.set_timer(pygame.USEREVENT + 1, 1000 // league.Settings.gameTimeFactor)
     engine.key_events[pygame.K_a] = player.move_left
     engine.key_events[pygame.K_d] = player.move_right

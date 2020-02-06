@@ -15,6 +15,7 @@ class Player(Character, Handle_Animations):
     """
     def __init__(self, z=0, x=0, y=0):
         super().__init__(z, x, y)
+        
         # This unit's health
         self.health = 100
         # Last time I was hit
@@ -211,6 +212,7 @@ class Player(Character, Handle_Animations):
         if now - self.last_hit > 1000:
             self.health = self.health - 10
             self.last_hit = now
+      
 
     # def update_sprite(self, loc):
     #     # pygame.display.update()
