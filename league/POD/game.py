@@ -14,7 +14,7 @@ def main():
     # Load the assets
     sprites = league.Spritesheet('./assets/sprite1.png', league.Settings.tile_size, 32)
     world_lvl_asset = league.Tilemap('./assets/world.lvl', sprites, layer = 0)
-    background_lvl_asset = league.Tilemap('./assets/background.lvl', sprites, layer = 1)
+    # background_lvl_asset = league.Tilemap('./assets/background.lvl', sprites, layer = 1)
     layer_2_lvl_asset = league.Tilemap('./assets/layer2.lvl', sprites, layer = 2)
 
     # set the world size
@@ -22,26 +22,24 @@ def main():
 
     # Tell the engine about the assets created
     engine.drawables.add(world_lvl_asset.passable.sprites())
-    engine.drawables.add(background_lvl_asset.passable.sprites())
+    # engine.drawables.add(background_lvl_asset.passable.sprites())
     engine.drawables.add(layer_2_lvl_asset.passable.sprites())
 
     # Create the player and give him a position and overlay
-    player = Player(200, 400, 300)
+    player = Player(2, 400, 300)
     player_overlay = Overlay(player)
 
     # Create npc and give position
     npcBlacksmith = Npc(400, 500, 300)
 
-
     # The assets the player can not go through
     player.blocks.add(world_lvl_asset.impassable)
-    player.blocks.add(background_lvl_asset.impassable)
-    player.blocks.add(layer_2_lvl_asset.impassable)
+    # player.blocks.add(background_lvl_asset.impassable)
+    # player.blocks.add(layer_2_lvl_asset.impassable)
 
     # Set sizing options for the player
     player.world_size = world_size
     player.rect = player.image.get_rect()
-
 
     # Add the player to the engine
     engine.objects.append(player)
