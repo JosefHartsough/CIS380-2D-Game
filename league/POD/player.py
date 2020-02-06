@@ -3,9 +3,11 @@ import pygame
 import league
 from enums import *
 import pprint
+from handle_animations import *
 
-class Player(Character):
-    """This is a sample class for a player object.  A player
+class Player(Character, Handle_Animations):
+    """
+    This is a sample class for a player object.  A player
     is a character, is a drawable, and an updateable object.
     This class should handle everything a player does, such as
     moving, throwing/shooting, collisions, etc.  It was hastily
@@ -46,8 +48,13 @@ class Player(Character):
         self.images[Player_State.WALK].update(self.animate_move_up())
         self.images[Player_State.WALK].update(self.animate_move_down())
 
-        # This is how our man spawns in.
-        loc_in_sprite_sheet = self.pull_sprite(2, 0)
+        #######################################################################
+        # This is how our man spawns in
+        # *** All we have to do is change the default path below from "player.png"
+        # to any of the other sprite sheets and the inheritance will take care
+        # of the rest. ***
+        #######################################################################
+        loc_in_sprite_sheet = self.pull_sprite(19, 0, file="player.png")
         self.update_sprite(loc_in_sprite_sheet)
 
         pp = pprint.PrettyPrinter(indent=1)
@@ -75,37 +82,37 @@ class Player(Character):
         self.font = pygame.font.Font('freesansbold.ttf',32)
         self.overlay = self.font.render(str(self.health) + "        4 lives", True, (0,0,0))
 
-    def animate_move_left(self):
-        range_of_motion = []
-        images = {}
-        for x in range(0, 8):
-            range_of_motion.append(self.pull_sprite(self.left_walk_const, x))
-        images[Direction.WEST] = range_of_motion
-        return images
-
-    def animate_move_right(self):
-        range_of_motion = []
-        images = {}
-        for x in range(0, 8):
-            range_of_motion.append(self.pull_sprite(self.right_walk_const, x))
-        images[Direction.EAST] = range_of_motion
-        return images
-
-    def animate_move_up(self):
-        range_of_motion = []
-        images = {}
-        for x in range(0, 8):
-            range_of_motion.append(self.pull_sprite(self.up_walk_const, x))
-        images[Direction.NORTH] = range_of_motion
-        return images
-
-    def animate_move_down(self):
-        range_of_motion = []
-        images = {}
-        for x in range(0, 8):
-            range_of_motion.append(self.pull_sprite(self.down_walk_const, x))
-        images[Direction.SOUTH] = range_of_motion
-        return images
+    # def animate_move_left(self):
+    #     range_of_motion = []
+    #     images = {}
+    #     for x in range(0, 8):
+    #         range_of_motion.append(self.pull_sprite(self.left_walk_const, x))
+    #     images[Direction.WEST] = range_of_motion
+    #     return images
+    #
+    # def animate_move_right(self):
+    #     range_of_motion = []
+    #     images = {}
+    #     for x in range(0, 8):
+    #         range_of_motion.append(self.pull_sprite(self.right_walk_const, x))
+    #     images[Direction.EAST] = range_of_motion
+    #     return images
+    #
+    # def animate_move_up(self):
+    #     range_of_motion = []
+    #     images = {}
+    #     for x in range(0, 8):
+    #         range_of_motion.append(self.pull_sprite(self.up_walk_const, x))
+    #     images[Direction.NORTH] = range_of_motion
+    #     return images
+    #
+    # def animate_move_down(self):
+    #     range_of_motion = []
+    #     images = {}
+    #     for x in range(0, 8):
+    #         range_of_motion.append(self.pull_sprite(self.down_walk_const, x))
+    #     images[Direction.SOUTH] = range_of_motion
+    #     return images
 
     def move_left(self, time):
         self.collisions = []
@@ -205,22 +212,22 @@ class Player(Character):
             self.health = self.health - 10
             self.last_hit = now
 
-    def update_sprite(self, loc):
-        # pygame.display.update()
-        self.image.blit(self.sheet, (0, 0), (loc[0], loc[1], loc[0] + self.tile_size, loc[1] + self.tile_size))
-
-    def pull_sprite(self, row, index, max_row_length = 13, num_rows = 20, file = "player.png"):
-        # create data structure to hold sprite images and for easier math
-        all_sprite_pictures = []
-        value_for_rows = 0
-
-        # fill up the array to have multiples of the longest row in the file
-        for i in range (0, num_rows):
-            all_sprite_pictures.append(value_for_rows)
-            value_for_rows += max_row_length
-        self.sheet = pygame.image.load(f"./assets/{file}").convert_alpha()
-        self.image = pygame.Surface((self.tile_size, self.tile_size), pygame.SRCALPHA).convert_alpha()
-        sprite_to_retrieve = all_sprite_pictures[row] + index
-        offset_x = self.tile_size * (sprite_to_retrieve  % max_row_length)
-        offset_y = self.tile_size * (sprite_to_retrieve  // max_row_length)
-        return (offset_x, offset_y)
+    # def update_sprite(self, loc):
+    #     # pygame.display.update()
+    #     self.image.blit(self.sheet, (0, 0), (loc[0], loc[1], loc[0] + self.tile_size, loc[1] + self.tile_size))
+    #
+    # def pull_sprite(self, row, index, max_row_length = 13, num_rows = 20, file = "player.png"):
+    #     # create data structure to hold sprite images and for easier math
+    #     all_sprite_pictures = []
+    #     value_for_rows = 0
+    #
+    #     # fill up the array to have multiples of the longest row in the file
+    #     for i in range (0, num_rows):
+    #         all_sprite_pictures.append(value_for_rows)
+    #         value_for_rows += max_row_length
+    #     self.sheet = pygame.image.load(f"./assets/{file}").convert_alpha()
+    #     self.image = pygame.Surface((self.tile_size, self.tile_size), pygame.SRCALPHA).convert_alpha()
+    #     sprite_to_retrieve = all_sprite_pictures[row] + index
+    #     offset_x = self.tile_size * (sprite_to_retrieve  % max_row_length)
+    #     offset_y = self.tile_size * (sprite_to_retrieve  // max_row_length)
+    #     return (offset_x, offset_y)
