@@ -5,8 +5,10 @@ class Player_State(IntEnum):
     """
     IDLE = 0
     WALK = 1
-    ATTACK = 2
-    THROW = 3
+    ATTACK_1 = 2
+    ATTACK_2 = 3
+    ATTACK_3 = 4
+    ATTACK_4 = 5
 
 from enum import IntEnum
 class Moving(IntEnum):

@@ -31,7 +31,7 @@ class Npc(Character, Handle_Animations):
         loc_in_sprite_sheet = self.pull_sprite(2, 1, file="ork.png")
         self.update_sprite(loc_in_sprite_sheet)
 
-        # Need to add location for NPC Sprite 
+        # Need to add location for NPC Sprite
         # self.image = pygame.image.load('./assets/sword_ninja_left.png').convert_alpha()
         # self.image  = pygame.transform.scale(self.image, (64,64))
         self.rect = self.image.get_rect()
@@ -55,11 +55,11 @@ class Npc(Character, Handle_Animations):
 
 
     # def nPCText(self):
-    #     """ 
-    #     A function to hold all of the text that the NPC will say 
+    #     """
+    #     A function to hold all of the text that the NPC will say
     #     and can respond with
     #     """
-    
+
     # This function will hold all the inventory that the blacksmith has to offer
 
     def update(self, time):
@@ -82,7 +82,7 @@ class Npc(Character, Handle_Animations):
     def interact(self):
         now = pygame.time.get_ticks()
         if now > 0:
-            screen = pygame.display.set_mode([640, 480])
+            screen = pygame.display.set_mode((Settings.width, Settings.height))
              # Fill background
             background = pygame.Surface(screen.get_size())
             background = background.convert()

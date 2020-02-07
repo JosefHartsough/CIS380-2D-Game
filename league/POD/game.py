@@ -14,7 +14,7 @@ def main():
     # Load the assets
     sprites = league.Spritesheet('./assets/sprite1.png', league.Settings.tile_size, 32)
     world_lvl_asset = league.Tilemap('./assets/world.lvl', sprites, layer = 0)
-    layer_1_lvl_asset = league.Tilemap('./assets/layer2.lvl', sprites, layer = 1)
+    layer_1_lvl_asset = league.Tilemap('./assets/layer1.lvl', sprites, layer = 1)
     layer_2_lvl_asset = league.Tilemap('./assets/layer2.lvl', sprites, layer = 2)
 
     # set the world size
@@ -22,8 +22,8 @@ def main():
 
     # Tell the engine about the assets created
     engine.drawables.add(world_lvl_asset.passable.sprites())
-    engine.drawables.add(layer_2_lvl_asset.passable.sprites())
     engine.drawables.add(layer_1_lvl_asset.passable.sprites())
+    engine.drawables.add(layer_2_lvl_asset.passable.sprites())
 
     # Create the player and give him a position and overlay
     player = Player(2, 400, 300)
@@ -34,6 +34,7 @@ def main():
 
     # The assets the player can not go through
     player.blocks.add(world_lvl_asset.impassable)
+    player.blocks.add(layer_1_lvl_asset.impassable)
     player.blocks.add(layer_2_lvl_asset.impassable)
 
     # Set sizing options for the player
@@ -64,6 +65,10 @@ def main():
     engine.key_events[pygame.K_d] = player.move_right
     engine.key_events[pygame.K_w] = player.move_up
     engine.key_events[pygame.K_s] = player.move_down
+    engine.key_events[pygame.K_1] = player.attack_1
+    engine.key_events[pygame.K_2] = player.attack_2
+    engine.key_events[pygame.K_3] = player.attack_3
+    engine.key_events[pygame.K_4] = player.attack_4
     # engine.events[pygame.USEREVENT + 1] = q.move_right
     engine.events[pygame.QUIT] = engine.stop
 
