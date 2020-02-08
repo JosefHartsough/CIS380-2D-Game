@@ -17,6 +17,7 @@ def main():
     layer_1_lvl_asset = league.Tilemap('./assets/layer1.lvl', sprites, layer = 1)
     layer_2_lvl_asset = league.Tilemap('./assets/layer2.lvl', sprites, layer = 2)
 
+
     # set the world size
     world_size = (world_lvl_asset.wide*league.Settings.tile_size, world_lvl_asset.high *league.Settings.tile_size)
 
