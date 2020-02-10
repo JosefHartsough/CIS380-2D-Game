@@ -59,7 +59,7 @@ def main():
 
     # look for different events in the game and call their methods
     # engine.collisions[player] = (q, player.ouch)
-    engine.collisions[player] = (npcBlacksmith, npcBlacksmith.interact)
+    engine.collisions[player] = (npcBlacksmith, npcBlacksmith.dialog)
     pygame.time.set_timer(pygame.USEREVENT + 1, 1000 // league.Settings.gameTimeFactor)
     engine.key_events[pygame.K_a] = player.move_left
     engine.key_events[pygame.K_d] = player.move_right
@@ -75,5 +75,5 @@ def main():
 
     engine.run()
 
-if __name__ =='__main__':
+if __name__ == '__main__':
     main()
