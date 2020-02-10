@@ -4,9 +4,10 @@ import league
 from enums import *
 import pprint
 from handle_animations import Handle_Animations
+from change_scene import Change_Scene
 import time
 
-class Player(Character, Handle_Animations):
+class Player(Character, Handle_Animations, Change_Scene):
     """
     This is a sample class for a player object.  A player
     is a character, is a drawable, and an updateable object.
@@ -14,9 +15,20 @@ class Player(Character, Handle_Animations):
     moving, throwing/shooting, collisions, etc.  It was hastily
     written as a demo but should direction.
     """
-    def __init__(self, z=0, x=0, y=0):
+    def __init__(self, engine, sprites, z=0, x=0, y=0):
         super().__init__(z, x, y)
 
+        self.engine = engine
+        self.sprites = sprites
+        self.layer_1_lvl_asset = league.Tilemap('./assets/layer1.lvl', self.sprites, layer = 1)
+        self.layer_2_lvl_asset = league.Tilemap('./assets/layer2.lvl', self.sprites, layer = 2)
+        self.engine.drawables.add(self.layer_1_lvl_asset.passable.sprites())
+        self.engine.drawables.add(self.layer_2_lvl_asset.passable.sprites())
+
+        # What sprites am I not allowd to cross?
+        self.blocks = pygame.sprite.Group()
+        self.blocks.add(self.layer_1_lvl_asset.impassable)
+        self.blocks.add(self.layer_2_lvl_asset.impassable)
         # This unit's health
         self.health = 100
         # Last time I was hit
@@ -118,8 +130,7 @@ class Player(Character, Handle_Animations):
         self.rect = self.image.get_rect()
         # How big the world is, so we can check for boundries
         self.world_size = (Settings.width, Settings.height)
-        # What sprites am I not allowd to cross?
-        self.blocks = pygame.sprite.Group()
+
         # Which collision detection function?
         self.collide_function = pygame.sprite.collide_circle
         self.collisions = []
@@ -300,3 +311,18 @@ class Player(Character, Handle_Animations):
         self.attack_2_animation = 0
         self.attack_3_animation = 0
         self.attack_4_animation = 0
+
+
+    def change_layers(self, time):
+        if (self.x > 400 and self.x < 450) and (self.y < 20):
+            self.blocks.remove(self.layer_1_lvl_asset.impassable)
+            self.blocks.remove(self.layer_2_lvl_asset.impassable)
+            self.layer_1_lvl_asset = league.Tilemap('./assets/scene2layer1.lvl', self.sprites, layer = 1)
+            self.layer_2_lvl_asset = league.Tilemap('./assets/scene2layer2.lvl', self.sprites, layer = 2)
+            self.engine.drawables.add(self.layer_1_lvl_asset.passable.sprites())
+            self.blocks.add(self.layer_1_lvl_asset.impassable)
+            self.engine.drawables.add(self.layer_2_lvl_asset.passable.sprites())
+            self.blocks.add(self.layer_2_lvl_asset.impassable)
+            self.x = 200
+            self.y = 300
+        # self.Change_Scene(300, 200, './assets/scene2layer1.lvl', './assets/scene2layer2.lvl')
