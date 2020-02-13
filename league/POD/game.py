@@ -5,6 +5,8 @@ import league
 from player import Player
 from overlay import Overlay
 from blacksmith import Npc
+from alchemist import NpcAlchemist
+from armorer import NpcArmor
 
 
 def main():
@@ -29,8 +31,15 @@ def main():
     player = Player(engine, sprites, 3, 400, 300)
     player_overlay = Overlay(player)
 
-    # Create npc and give position
+   
+    # Create npcBlacksmith and give position
     npcBlacksmith = Npc(2, 100, 500)
+
+    # Create npcAlchemist and give position
+    npcAlchemist = NpcAlchemist(200, 600, 120)
+
+    # Create npcArmorer and give position
+    npcArmorer = NpcArmor(200, 700, 400)
 
     # The assets the player can not go through
     player.blocks.add(world_lvl_asset.impassable)
@@ -43,13 +52,17 @@ def main():
 
     # Add the player to the engine
     engine.objects.append(player)
-    engine.objects.append(npcBlacksmith)
     engine.drawables.add(player)
     engine.drawables.add(player_overlay)
 
-    # Add the NPC to the engine
+    # Add the NPCs to the engine
     # engine.objects.append(npcBlacksmith)
+    engine.objects.append(npcBlacksmith)
     engine.drawables.add(npcBlacksmith)
+    engine.objects.append(npcAlchemist)
+    engine.drawables.add(npcAlchemist)
+    engine.objects.append(npcArmorer)
+    engine.drawables.add(npcArmorer)
 
     # create the camera and add it to the engine
     camera = league.LessDumbCamera(800, 600, player, engine.drawables, world_size)
@@ -59,7 +72,9 @@ def main():
 
     # look for different events in the game and call their methods
     # engine.collisions[player] = (q, player.ouch)
-    engine.collisions[player] = (npcBlacksmith, npcBlacksmith.dialog)
+    # engine.collisions[player] = (npcBlacksmith, npcBlacksmith.dialog)
+    # engine.collisions[player] = (npcAlchemist, npcAlchemist.dialog)
+    # engine.collisions[player] = (npcArmorer, npcArmorer.dialog)
     pygame.time.set_timer(pygame.USEREVENT + 1, 1000 // league.Settings.gameTimeFactor)
     engine.key_events[pygame.K_a] = player.move_left
     engine.key_events[pygame.K_d] = player.move_right
@@ -70,6 +85,11 @@ def main():
     engine.key_events[pygame.K_3] = player.attack_3
     engine.key_events[pygame.K_4] = player.attack_4
     engine.key_events[pygame.K_m] = player.change_layers
+    # Need to add when near each vendor, e opens the inventory menu
+    # rangeX = range(100, 120)
+    # if (player.x == rangeX):
+    #     engine.key_events[pygame.K_e] = npcBlacksmith.dialog
+
     # engine.events[pygame.USEREVENT + 1] = q.move_right
     engine.events[pygame.QUIT] = engine.stop
 
