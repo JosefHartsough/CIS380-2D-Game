@@ -16,16 +16,16 @@ def main():
     # Load the assets
     sprites = league.Spritesheet('./assets/sprite1.png', league.Settings.tile_size, 32)
     world_lvl_asset = league.Tilemap('./assets/world.lvl', sprites, layer = 0)
-    # layer_1_lvl_asset = league.Tilemap('./assets/layer1.lvl', sprites, layer = 1)
-    # layer_2_lvl_asset = league.Tilemap('./assets/layer2.lvl', sprites, layer = 2)
+    layer_1_lvl_asset = league.Tilemap('./assets/layer1.lvl', sprites, layer = 1)
+    layer_2_lvl_asset = league.Tilemap('./assets/layer2.lvl', sprites, layer = 2)
 
     # set the world size
     world_size = (world_lvl_asset.wide*league.Settings.tile_size, world_lvl_asset.high *league.Settings.tile_size)
 
     # Tell the engine about the assets created
     engine.drawables.add(world_lvl_asset.passable.sprites())
-    # engine.drawables.add(layer_1_lvl_asset.passable.sprites())
-    # engine.drawables.add(layer_2_lvl_asset.passable.sprites())
+    engine.drawables.add(layer_1_lvl_asset.passable.sprites())
+    engine.drawables.add(layer_2_lvl_asset.passable.sprites())
 
     # Create the player and give him a position and overlay
     player = Player(engine, sprites, 3, 400, 300)
@@ -43,8 +43,8 @@ def main():
 
     # The assets the player can not go through
     player.blocks.add(world_lvl_asset.impassable)
-    # player.blocks.add(layer_1_lvl_asset.impassable)
-    # player.blocks.add(layer_2_lvl_asset.impassable)
+    player.blocks.add(layer_1_lvl_asset.impassable)
+    player.blocks.add(layer_2_lvl_asset.impassable)
 
     # Set sizing options for the player
     player.world_size = world_size
