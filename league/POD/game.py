@@ -7,7 +7,7 @@ from overlay import Overlay
 from blacksmith import Npc
 from alchemist import NpcAlchemist
 from armorer import NpcArmor
-
+from enemies import Enemies
 
 def main():
     engine = league.Engine("Path of Darkness")
@@ -28,10 +28,12 @@ def main():
     engine.drawables.add(layer_2_lvl_asset.passable.sprites())
 
     # Create the player and give him a position and overlay
-    player = Player(engine, sprites, 3, 400, 300)
+    player = Player("girl_big.png", 3, 400, 300)
     player_overlay = Overlay(player)
 
-   
+    # create an enemy to figure out how to do damage. Using the player since he
+    # has all of the attacks and abilities I do
+    enemy = Enemies("naked_man_with_long_sword.png", 3, 400, 400)
     # Create npcBlacksmith and give position
     npcBlacksmith = Npc(2, 100, 500)
 
@@ -45,15 +47,22 @@ def main():
     player.blocks.add(world_lvl_asset.impassable)
     player.blocks.add(layer_1_lvl_asset.impassable)
     player.blocks.add(layer_2_lvl_asset.impassable)
+    enemy.blocks.add(world_lvl_asset.impassable)
+    enemy.blocks.add(layer_1_lvl_asset.impassable)
+    enemy.blocks.add(layer_2_lvl_asset.impassable)
 
     # Set sizing options for the player
     player.world_size = world_size
     player.rect = player.image.get_rect()
+    enemy.world_size = world_size
+    enemy.rect = enemy.image.get_rect()
 
     # Add the player to the engine
     engine.objects.append(player)
     engine.drawables.add(player)
-    engine.drawables.add(player_overlay)
+    engine.objects.append(enemy)
+    engine.drawables.add(enemy)
+    # engine.drawables.add(player_overlay)
 
     # Add the NPCs to the engine
     # engine.objects.append(npcBlacksmith)
@@ -68,7 +77,7 @@ def main():
     camera = league.LessDumbCamera(800, 600, player, engine.drawables, world_size)
     # camera = league.DumbCamera(800, 600, player, engine.drawables, world_size)
     engine.objects.append(camera)
-    engine.objects.append(player_overlay)
+    # engine.objects.append(player_overlay)
 
     # look for different events in the game and call their methods
     # engine.collisions[player] = (q, player.ouch)
@@ -84,6 +93,9 @@ def main():
     engine.key_events[pygame.K_2] = player.attack_2
     engine.key_events[pygame.K_3] = player.attack_3
     engine.key_events[pygame.K_4] = player.attack_4
+    engine.key_events[pygame.K_5] = player.attack_5
+    engine.key_events[pygame.K_6] = enemy.check_damage
+
     engine.key_events[pygame.K_m] = player.change_layers
     # Need to add when near each vendor, e opens the inventory menu
     # rangeX = range(100, 120)

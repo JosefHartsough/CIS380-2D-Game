@@ -9,6 +9,8 @@ class Player_State(IntEnum):
     ATTACK_2 = 3
     ATTACK_3 = 4
     ATTACK_4 = 5
+    ATTACK_5 = 6
+
 
 from enum import IntEnum
 class Moving(IntEnum):

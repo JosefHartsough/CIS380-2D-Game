@@ -13,10 +13,13 @@ class Handle_Animations:
     def __init__(self):
         pass
 
-    def update_sprite(self, loc):
-        self.image.blit(self.sheet, (0, 0), (loc[0], loc[1], loc[0] + self.tile_size, loc[1] + self.tile_size))
+    def update_sprite(self, loc, offset_x = 0, offset_y = 0, rect_size = 64):
+        loc_offset = 0
+        # add = - loc_offset
+        self.image.blit(self.sheet, (0, 0), (loc[0] + offset_x, loc[1] + offset_y, loc[0] + rect_size, loc[1] + rect_size))
+        # self.image.blit(self.sheet, (loc_offset, loc_offset), (loc[0] + offset_x  + add, loc[1] + offset_y + add, loc[0] + self.tile_size + add, loc[1] + self.tile_size + add))
 
-    def pull_sprite(self, row, index, max_row_length = 13, num_rows = 20, file = "player.png"):
+    def pull_sprite(self, row, index, max_row_length = 13, num_rows = 20, file = "player.png", image_size = 64):
         # create data structure to hold sprite images and for easier math
         all_sprite_pictures = []
         value_for_rows = 0
@@ -27,7 +30,7 @@ class Handle_Animations:
             value_for_rows += max_row_length
 
         self.sheet = pygame.image.load(f"./assets/{file}").convert_alpha()
-        self.image = pygame.Surface((self.tile_size, self.tile_size), pygame.SRCALPHA).convert_alpha()
+        self.image = pygame.Surface((image_size, image_size), pygame.SRCALPHA).convert_alpha()
         sprite_to_retrieve = all_sprite_pictures[row] + index
         offset_x = self.tile_size * (sprite_to_retrieve  % max_row_length)
         offset_y = self.tile_size * (sprite_to_retrieve  // max_row_length)
@@ -109,6 +112,22 @@ class Handle_Animations:
         elif row == self.attack_4_down_row:
             images[Direction.SOUTH] = range_of_motion
         elif row == self.attack_4_right_row:
+            images[Direction.EAST] = range_of_motion
+
+        return images
+
+    def animate_attacking_5(self, row, num_animations):
+        range_of_motion = []
+        images = {}
+        for x in range(0, num_animations):
+            range_of_motion.append(self.pull_sprite(row, x * 3 + 0, max_row_length = 24, num_rows=35, image_size = 192))
+        if row == self.attack_5_up_row:
+            images[Direction.NORTH] = range_of_motion
+        elif row == self.attack_5_left_row:
+            images[Direction.WEST] = range_of_motion
+        elif row == self.attack_5_down_row:
+            images[Direction.SOUTH] = range_of_motion
+        elif row == self.attack_5_right_row:
             images[Direction.EAST] = range_of_motion
 
         return images

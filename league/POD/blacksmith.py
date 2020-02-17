@@ -24,21 +24,21 @@ class Npc(Character, Handle_Animations):
         self.npcX = x
         self.npcY = y
 
-        # Array to hold all the icon objects 
+        # Array to hold all the icon objects
         #self.iconImages = []
-        
+
         # Image for the background behing the inventory image
         # TODO: Possibly change this? Just thought it looked cool so i threw that boy in
-        # Feel free to change up 
+        # Feel free to change up
         self.inventoryScreenBackground = pygame.image.load('./assets/inventoryScreenBackground.png')
-        
+
         # Loads all the icons for the items in the inventory
         # Organized like this in the inventory
         # 1-2-3     7-8-9
-        # 4-5-6    10-11-12     
+        # 4-5-6    10-11-12
         self.inventoryBackground = pygame.image.load('./assets/inventory.png')
         self.inventoryBackground = pygame.transform.scale(self.inventoryBackground, (400, 200))
- 
+
         self.IconOne = pygame.image.load('./assets/ax.png').convert_alpha()
         self.IconOne = pygame.transform.scale(self.IconOne,(64, 64))
 
@@ -62,25 +62,29 @@ class Npc(Character, Handle_Animations):
 
         # self.IconEight = pygame.image.load('./assets/zombie.png').convert_alpha()
         # self.IconEight = pygame.transform.scale(self.IconEight,(64, 64))
- 
+
         # self.IconNine = pygame.image.load('./assets/zombie.png').convert_alpha()
         # self.IconNine = pygame.transform.scale(self.IconNine,(64, 64))
 
         # self.IconTen = pygame.image.load('./assets/zombie.png').convert_alpha()
         # self.IconTen = pygame.transform.scale(self.IconTen,(64, 64))
-   
+
         # self.IconEleven = pygame.image.load('./assets/zombie.png').convert_alpha()
         # self.IconEleven = pygame.transform.scale(self.IconEleven,(64, 64))
- 
+
         # self.IconTwelve = pygame.image.load('./assets/zombie.png').convert_alpha()
         # self.IconTwelve = pygame.transform.scale(self.IconTwelve,(64, 64))
-           
+
 
         self.tile_size = league.Settings.tile_size * 2
         self.direction = Direction.WEST
         self.state = Player_State.IDLE
         self.images = {}
         self.frame = 0
+
+        # Checks to see if collision has happened with player
+        # Still having a bug that it opens when starting the game
+        self.npcCollisionCheck = False
 
         loc_in_sprite_sheet = self.pull_sprite(2, 1, file="ork.png")
         self.update_sprite(loc_in_sprite_sheet)
@@ -155,9 +159,9 @@ class Npc(Character, Handle_Animations):
     #     }
 
     def dialog(self, time):
-        
+
         screen = pygame.display.set_mode((800, 600))
-       
+
         # Sets the screen to the background image
         screen.blit(self.inventoryScreenBackground, (0,0))
         screen.blit(self.inventoryBackground, (180, 140))
@@ -170,10 +174,8 @@ class Npc(Character, Handle_Animations):
         interactiveBoxDimensionsX = 40
         interactiveBoxDimensionsY = 40
 
-        # Checks to see if collision has happened with player
-        # Still having a bug that it opens when starting the game
-        npcCollisionCheck = False
-        
+        self.npcCollisionCheck = True
+
         clock = pygame.time.Clock()
 
         # RGB values for grey
@@ -210,14 +212,14 @@ class Npc(Character, Handle_Animations):
         # Selector. Going to change this to an image...whenever i figure out how the fuck to do that
         # Currently having it spawn in the top left of the screen
         selector = pygame.Rect(185, 145, 10, 10)
-        
+
         # Checks if the player has collided with the NPC
         # Sets the movement for the selector
         # TODO:Add functionality for the mouse and not the keyboard for cursor movement
-        while not npcCollisionCheck:
+        while self.npcCollisionCheck:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    npcCollisionCheck = True
+                    self.npcCollisionCheck = True
 
             pressed = pygame.key.get_pressed()
             if pressed[pygame.K_w] and y > 0:
@@ -236,7 +238,7 @@ class Npc(Character, Handle_Animations):
 
             # Color for the selector
             color = (0, 128, 255)
-            
+
             # Draws all the rects that are our interactive box
             # IMPORTANT:Make sure all of the interactive boxes
             # are drawn before the selector and icon images
@@ -253,7 +255,7 @@ class Npc(Character, Handle_Animations):
             # pygame.draw.rect(screen, grey, interactiveIconTen)
             # pygame.draw.rect(screen, grey, interactiveIconEleven)
             # pygame.draw.rect(screen, grey, interactiveIconTwelve)
-                    
+
             pygame.draw.rect(screen, grey, dialogOptions)
 
 
@@ -271,13 +273,13 @@ class Npc(Character, Handle_Animations):
             # screen.blit(self.IconTen, (400, 205))
             # screen.blit(self.IconEleven, (460, 205))
             # screen.blit(self.IconTwelve, (520, 205))
-            
+
             # Font for when printing text
             # TODO:Will be used in the future for dialog and text in general in menu
             # Will be adding more fonts for different things
             font = pygame.font.SysFont("monospace", 25)
 
-            # Text for NPC Inventory 
+            # Text for NPC Inventory
             npcInventory = font.render("NPC INVENTORY", 1, (255, 255, 255))
             screen.blit(npcInventory, (185, 100))
             # Text for Player Iventory
@@ -319,13 +321,12 @@ class Npc(Character, Handle_Animations):
                         # elif rect == interactiveIconEleven:
                         #     print('11')
                         # elif rect == interactiveIconTwelve:
-                        #     print('12')                             
+                        #     print('12')
                         elif rect == myInventory:
                             print('playerInv')
                         elif rect == dialogOptions:
                             # Quit!
-                            npcCollisionCheck = True
+                            self.npcCollisionCheck = True
 
             pygame.display.flip()
             clock.tick(60)
-
