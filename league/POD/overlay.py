@@ -7,10 +7,12 @@ class Overlay(league.DUGameObject):
         self._layer = 1000
         self.player = player
         self.font = pygame.font.Font('freesansbold.ttf',32)
-        self.image = pygame.Surface([800, 40])
+        self.image = pygame.Surface([800, 64])
         self.image.fill((127, 127, 127))
         self.text = self.font.render(str(self.player.health) + "        4 lives", True, (0,0,0))
         self.image.blit(self.text, (0, 0))
+        self.overlaytext = pygame.image.load('./assets/textbox.png')
+        self.image.blit(self.overlaytext, (640, 0))
         self.rect = self.image.get_rect()
         self.x = 0
         self.y = 0
@@ -22,3 +24,4 @@ class Overlay(league.DUGameObject):
         self.image.fill((127, 127, 127))
         self.text = self.font.render(str(self.player.health) + "        4 lives", True, (0,0,0))
         self.image.blit(self.text, (0, 0))
+        self.image.blit(self.overlaytext, (640, 0))
