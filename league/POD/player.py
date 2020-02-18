@@ -55,6 +55,7 @@ class Player(Character, Handle_Animations, Change_Scene):
                             self.attack_1_down_row, self.attack_1_right_row]
         self.num_animations_to_attack_1 = 7
         self.attack_1_animation = 0
+        self.attack_1_finished = False
 
         # these are the rows on the sprite sheet that make him use his second attack
         self.attack_2_up_row = 4
@@ -65,6 +66,7 @@ class Player(Character, Handle_Animations, Change_Scene):
                             self.attack_2_down_row, self.attack_2_right_row]
         self.num_animations_to_attack_2 = 8
         self.attack_2_animation = 0
+        self.attack_2_finished = False
 
         # these are the rows on the sprite sheet that make him use his third attack
         self.attack_3_up_row = 12
@@ -75,6 +77,7 @@ class Player(Character, Handle_Animations, Change_Scene):
                             self.attack_3_down_row, self.attack_3_right_row]
         self.num_animations_to_attack_3 = 6
         self.attack_3_animation = 0
+        self.attack_3_finished = False
 
         # these are the rows on the sprite sheet that make him use his fourth attack
         self.attack_4_up_row = 16
@@ -85,6 +88,7 @@ class Player(Character, Handle_Animations, Change_Scene):
                             self.attack_4_down_row, self.attack_4_right_row]
         self.num_animations_to_attack_4 = 13
         self.attack_4_animation = 0
+        self.attack_4_finished = False
 
         # these are the rows on the sprite sheet that make him use his fifth attack
         self.attack_5_up_row = 21
@@ -95,6 +99,7 @@ class Player(Character, Handle_Animations, Change_Scene):
         self.num_animations_to_attack_5 = 8
         self.attack_5_animation = 0
         self.has_not_hit_5 = True
+        self.attack_5_finished = False
 
         # create animation needed variables
         self.tile_size = league.Settings.tile_size * 2
@@ -108,6 +113,7 @@ class Player(Character, Handle_Animations, Change_Scene):
         self.images[Player_State.ATTACK_4] = {}
         self.images[Player_State.ATTACK_5] = {}
         self.frame = 0
+        self.turn = True
 
         # Load in all of the pictures required for moving. Rather than calling
         # a function for each row, I combined the rows into an array and we simply
@@ -115,9 +121,9 @@ class Player(Character, Handle_Animations, Change_Scene):
         # necessary pictures.
         for row in walking_rows:
             self.images[Player_State.WALK].update(self.animate_walking(row))
-
-        # for row in attacking_rows_1:
-        #     self.images[Player_State.ATTACK_1].update(self.animate_attacking_1(row, self.num_animations_to_attack_1))
+        #
+        for row in attacking_rows_1:
+            self.images[Player_State.ATTACK_1].update(self.animate_attacking_1(row, self.num_animations_to_attack_1))
         #
         # for row in attacking_rows_2:
         #     self.images[Player_State.ATTACK_2].update(self.animate_attacking_2(row, self.num_animations_to_attack_2))
@@ -127,24 +133,18 @@ class Player(Character, Handle_Animations, Change_Scene):
         #
         # for row in attacking_rows_4:
         #     self.images[Player_State.ATTACK_4].update(self.animate_attacking_4(row, self.num_animations_to_attack_4))
+        #
+        # for row in attacking_rows_5:
+        #     self.images[Player_State.ATTACK_5].update(self.animate_attacking_5(row, self.num_animations_to_attack_5))
 
-        for row in attacking_rows_5:
-            self.images[Player_State.ATTACK_5].update(self.animate_attacking_5(row, self.num_animations_to_attack_5))
 
-        #######################################################################
-        # This is how our man spawns in
-        # *** All we have to do is change the default path below from "player.png"
-        # to any of the other sprite sheets and the inheritance will take care
-        # of the rest. ***
-        #######################################################################
+        # Give our person an initial spawned in orientation
         # 21 rows (starting at 1), before big picture
-        print(" **************************************************************************")
         loc_in_sprite_sheet = self.pull_sprite(19, 0, file = self.sprites_to_use)
-        # loc_in_sprite_sheet = self.pull_sprite(30, 10, max_row_length = 24, num_rows=35, file="girl_big.png", image_size = 192)
         self.update_sprite(loc_in_sprite_sheet, offset_x = 0)
 
         pp = pprint.PrettyPrinter(indent=1)
-        print("\nThe multi-leveled hash of our pictures")
+        print("\nThe multi-leveled hash for", self.sprites_to_use)
         pp.pprint(self.images)
 
         self.rect = self.image.get_rect()
@@ -280,6 +280,7 @@ class Player(Character, Handle_Animations, Change_Scene):
             self.last_hit = now
 
     def attack_1(self, time):
+        self.attack_1_finished = False
         if self.attack_1_animation < self.num_animations_to_attack_1:
             self.collisions = []
             amount = self.delta * time
@@ -294,8 +295,12 @@ class Player(Character, Handle_Animations, Change_Scene):
                 self.attack_1_animation += 1
             except:
                 pass
+        elif self.attack_1_animation == self.num_animations_to_attack_1:
+            self.attack_1_finished = True
+            self.attack_1_animation += 1
 
     def attack_2(self, time):
+        self.attack_2_finished = False
         if self.attack_2_animation < self.num_animations_to_attack_2:
             self.collisions = []
             amount = self.delta * time
@@ -310,8 +315,12 @@ class Player(Character, Handle_Animations, Change_Scene):
                 self.attack_2_animation += 1
             except:
                 pass
+        elif self.attack_2_animation == self.num_animations_to_attack_2:
+            self.attack_2_finished = True
+            self.attack_2_animation += 1
 
     def attack_3(self, time):
+        self.attack_3_finished = False
         if self.attack_3_animation < self.num_animations_to_attack_3:
             self.collisions = []
             amount = self.delta * time
@@ -326,8 +335,12 @@ class Player(Character, Handle_Animations, Change_Scene):
                 self.attack_3_animation += 1
             except:
                 pass
+        elif self.attack_3_animation == self.num_animations_to_attack_3:
+            self.attack_3_finished = True
+            self.attack_3_animation += 1
 
     def attack_4(self, time):
+        self.attack_4_finished = False
         if self.attack_4_animation < self.num_animations_to_attack_4:
             self.collisions = []
             amount = self.delta * time
@@ -342,8 +355,12 @@ class Player(Character, Handle_Animations, Change_Scene):
                 self.attack_4_animation += 1
             except:
                 pass
+        elif self.attack_4_animation == self.num_animations_to_attack_4:
+            self.attack_4_finished = True
+            self.attack_4_animation += 1
 
     def attack_5(self, time):
+        self.attack_5_finished = False
         if self.has_not_hit_5:
             self.before_x = self.x
             self.before_y = self.y
@@ -363,6 +380,9 @@ class Player(Character, Handle_Animations, Change_Scene):
                 self.has_not_hit_5 = False
             except:
                 pass
+        elif self.attack_5_animation == self.num_animations_to_attack_5:
+            self.attack_5_finished = True
+            self.attack_5_animation += 1
 
     def update_self_variables(self):
         self.attack_1_animation = 0

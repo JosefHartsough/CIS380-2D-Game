@@ -25,3 +25,14 @@ class Moving(IntEnum):
     SOUTH_EAST = 5
     EAST = 6
     NORTH_EAST = 7
+
+from enum import IntEnum
+class Attack_Damage(IntEnum):
+    """
+    These are the values for each attack
+    """
+    FIRST_ATTACK = 50
+    SECOND_ATTACK = 10
+    THIRD_ATTACK = 10
+    FOURTH_ATTACK = 10
+    FIFTH_ATTACK = 50

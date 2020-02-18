@@ -7,7 +7,7 @@ from overlay import Overlay
 from blacksmith import Npc
 from alchemist import NpcAlchemist
 from armorer import NpcArmor
-from enemies import Enemies
+from turns import Turns
 
 def main():
     engine = league.Engine("Path of Darkness")
@@ -28,12 +28,13 @@ def main():
     engine.drawables.add(layer_2_lvl_asset.passable.sprites())
 
     # Create the player and give him a position and overlay
-    player = Player("girl_big.png", 3, 400, 300)
+    player = Player("girl_big.png", 3, 400, 250)
     player_overlay = Overlay(player)
 
     # create an enemy to figure out how to do damage. Using the player since he
     # has all of the attacks and abilities I do
-    enemy = Enemies("naked_man_with_long_sword.png", 3, 400, 400)
+    enemy = Player("naked_man_with_long_sword.png", 3, 400, 400)
+
     # Create npcBlacksmith and give position
     npcBlacksmith = Npc(2, 100, 500)
 
@@ -73,6 +74,9 @@ def main():
     engine.objects.append(npcArmorer)
     engine.drawables.add(npcArmorer)
 
+    # interface for the turn system
+    turns = Turns(player, enemy, engine)
+
     # create the camera and add it to the engine
     camera = league.LessDumbCamera(800, 600, player, engine.drawables, world_size)
     # camera = league.DumbCamera(800, 600, player, engine.drawables, world_size)
@@ -85,16 +89,16 @@ def main():
     # engine.collisions[player] = (npcAlchemist, npcAlchemist.dialog)
     # engine.collisions[player] = (npcArmorer, npcArmorer.dialog)
     pygame.time.set_timer(pygame.USEREVENT + 1, 1000 // league.Settings.gameTimeFactor)
-    engine.key_events[pygame.K_a] = player.move_left
-    engine.key_events[pygame.K_d] = player.move_right
-    engine.key_events[pygame.K_w] = player.move_up
-    engine.key_events[pygame.K_s] = player.move_down
-    engine.key_events[pygame.K_1] = player.attack_1
-    engine.key_events[pygame.K_2] = player.attack_2
-    engine.key_events[pygame.K_3] = player.attack_3
-    engine.key_events[pygame.K_4] = player.attack_4
-    engine.key_events[pygame.K_5] = player.attack_5
-    engine.key_events[pygame.K_6] = enemy.check_damage
+    engine.key_events[pygame.K_a] = turns.move_left
+    engine.key_events[pygame.K_d] = turns.move_right
+    engine.key_events[pygame.K_w] = turns.move_up
+    engine.key_events[pygame.K_s] = turns.move_down
+
+    engine.key_events[pygame.K_1] = turns.attack_1
+    engine.key_events[pygame.K_2] = turns.attack_2
+    engine.key_events[pygame.K_3] = turns.attack_3
+    engine.key_events[pygame.K_4] = turns.attack_4
+    engine.key_events[pygame.K_5] = turns.attack_5
 
     engine.key_events[pygame.K_m] = player.change_layers
     # Need to add when near each vendor, e opens the inventory menu
