@@ -265,6 +265,7 @@ class Turns():
                     if enemy.health <= 0:
                         self.engine.objects.remove(enemy)
                         self.engine.drawables.remove(enemy)
+                        self.enemies.remove(enemy)
 
     def check_damage_big_weapon(self, damage):
         for enemy in self.enemies:
@@ -274,6 +275,7 @@ class Turns():
                     if enemy.health <= 0:
                         self.engine.objects.remove(enemy)
                         self.engine.drawables.remove(enemy)
+                        self.enemies.remove(enemy)
 
     def control_last_attack(self, last_attack):
         for attack in self.all_attacks.keys():
