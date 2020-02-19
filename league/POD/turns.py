@@ -67,7 +67,7 @@ class Turns():
             self.has_not_hit_left = False
         else:
             self.engine.key_events[pygame.K_a] = self.ghetto_stop
-            self.move_enemies(time)
+            self.enemy_decision(time)
 
     def move_right(self, time):
         if self.player.turn:
@@ -94,7 +94,7 @@ class Turns():
             self.has_not_hit_right = False
         else:
             self.engine.key_events[pygame.K_d] = self.ghetto_stop
-            self.move_enemies(time)
+            self.enemy_decision(time)
 
     def move_up(self, time):
         if self.player.turn:
@@ -121,7 +121,7 @@ class Turns():
         else:
 
             self.engine.key_events[pygame.K_w] = self.ghetto_stop
-            self.move_enemies(time)
+            self.enemy_decision(time)
 
     def move_down(self, time):
         if self.player.turn:
@@ -147,7 +147,7 @@ class Turns():
             self.has_not_hit_down = False
         else:
             self.engine.key_events[pygame.K_s] = self.ghetto_stop
-            self.move_enemies(time)
+            self.enemy_decision(time)
 
     ###########################################################################
     # Attacking stuff
@@ -170,7 +170,7 @@ class Turns():
                         self.remove_enemy()
         else:
             self.engine.key_events[pygame.K_1] = self.ghetto_stop
-            self.move_enemies(time)
+            self.enemy_decision(time)
 
     def attack_2(self, time):
         if self.player.turn:
@@ -189,7 +189,7 @@ class Turns():
                         self.remove_enemy()
         else:
             self.engine.key_events[pygame.K_2] = self.ghetto_stop
-            self.move_enemies(time)
+            self.enemy_decision(time)
 
 
     def attack_3(self, time):
@@ -209,7 +209,7 @@ class Turns():
                         self.remove_enemy()
         else:
             self.engine.key_events[pygame.K_3] = self.ghetto_stop
-            self.move_enemies(time)
+            self.enemy_decision(time)
 
 
     def attack_4(self, time):
@@ -229,7 +229,7 @@ class Turns():
                         self.remove_enemy()
         else:
             self.engine.key_events[pygame.K_4] = self.ghetto_stop
-            self.move_enemies(time)
+            self.enemy_decision(time)
 
 
     def attack_5(self, time):
@@ -249,7 +249,7 @@ class Turns():
                         self.remove_enemy()
         else:
             self.engine.key_events[pygame.K_5] = self.ghetto_stop
-            self.move_enemies(time)
+            self.enemy_decision(time)
 
     def check_damage_small_weapon(self):
         if abs(self.player.x - self.enemy.x) < 64 and abs(self.player.y - self.enemy.y) < 64:
@@ -280,7 +280,27 @@ class Turns():
     # Helper Functions
     ###########################################################################
 
-    def move_enemies(self, time):
+    def enemy_decision(self, time):
+        dist_from_x = abs(self.enemy.x - self.player.x)
+        dist_from_y = abs(self.enemy.y - self.player.y)
+
+        if dist_from_x < 64 and dist_from_y < 64:
+            self.attack_player(time, dist_from_x, dist_from_y)
+        elif dist_from_x < 1000 and dist_from_y < 1000:
+            self.move_enemies_to_player(time, dist_from_x, dist_from_y)
+        else:
+            self.move_randomly(self.enemy, {"any"}, time)
+        self.reset_variables()
+
+    def attack_player(self, time, dist_from_x, dist_from_y):
+        print("player health before", self.player.health)
+        for x in range(0, 20):
+            self.enemy.attack_1(time)
+        if self.check_damage_small_weapon():
+            self.player.health -= Attack_Damage.FIRST_ATTACK
+        print("player health after", self.player.health)
+
+    def move_enemies_to_player(self, time, dist_from_x, dist_from_y):
         """
         This is a pretty big and nasty method that basically acts as the AI for
         the enemies. Whichever direction, x or y, that I am further away from
@@ -290,8 +310,6 @@ class Turns():
         """
         before_x = self.enemy.x
         before_y = self.enemy.y
-        dist_from_x = abs(self.enemy.x - self.player.x)
-        dist_from_y = abs(self.enemy.y - self.player.y)
         path = []
         # I randomly chose 50 just to give it enough cycles to move 64 pixels
         for x in range(0, 50):
@@ -353,8 +371,6 @@ class Turns():
                             self.enemy.move_down(time)
                     else:
                         break
-        self.reset_variables()
-
 
     def move_randomly(self, sprite_to_move, direction_to_not_move, time):
         # do set subtraction to figure out which direction to go and then

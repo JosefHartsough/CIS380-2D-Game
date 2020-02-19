@@ -28,7 +28,7 @@ class Player(Character, Handle_Animations, Change_Scene):
         # Last time I was hit
         self.last_hit = pygame.time.get_ticks()
         # A unit-less value. Bigger is faster. Changes player speed
-        self.delta = 200
+        self.delta = 100
         # Where the player is positioned
         self.x = x
         self.y = y
@@ -121,10 +121,10 @@ class Player(Character, Handle_Animations, Change_Scene):
         # necessary pictures.
         for row in walking_rows:
             self.images[Player_State.WALK].update(self.animate_walking(row))
-        #
+
         for row in attacking_rows_1:
             self.images[Player_State.ATTACK_1].update(self.animate_attacking_1(row, self.num_animations_to_attack_1))
-        #
+
         for row in attacking_rows_2:
             self.images[Player_State.ATTACK_2].update(self.animate_attacking_2(row, self.num_animations_to_attack_2))
         #
