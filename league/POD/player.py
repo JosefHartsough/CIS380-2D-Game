@@ -28,7 +28,7 @@ class Player(Character, Handle_Animations, Change_Scene):
         # Last time I was hit
         self.last_hit = pygame.time.get_ticks()
         # A unit-less value. Bigger is faster. Changes player speed
-        self.delta = 100
+        self.delta = 200
         # Where the player is positioned
         self.x = x
         self.y = y
