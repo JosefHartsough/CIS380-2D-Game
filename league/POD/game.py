@@ -15,9 +15,11 @@ def main():
 
     # Load the assets
     sprites = league.Spritesheet('./assets/sprite1.png', league.Settings.tile_size, 32)
+   # sprites1=league.Spritesheet('./assets/beach_tileset.png', league.Settings.tile_size, 16)
     world_lvl_asset = league.Tilemap('./assets/world.lvl', sprites, layer = 0)
     layer_1_lvl_asset = league.Tilemap('./assets/layer1.lvl', sprites, layer = 1)
     layer_2_lvl_asset = league.Tilemap('./assets/layer2.lvl', sprites, layer = 2)
+   # water_lvl_asset = league.Tilemap('./assets/layer3.lvl', sprites1, layer = 1)
 
     # set the world size
     world_size = (world_lvl_asset.wide*league.Settings.tile_size, world_lvl_asset.high *league.Settings.tile_size)
@@ -26,6 +28,7 @@ def main():
     engine.drawables.add(world_lvl_asset.passable.sprites())
     engine.drawables.add(layer_1_lvl_asset.passable.sprites())
     engine.drawables.add(layer_2_lvl_asset.passable.sprites())
+  #  engine.drawables.add(water_lvl_asset.passable.sprites())
 
     # Create the player and give him a position and overlay
     player = Player("girl_big.png", 3, 400, 250)
