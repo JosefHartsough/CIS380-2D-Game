@@ -8,6 +8,7 @@ from blacksmith import Npc
 from alchemist import NpcAlchemist
 from armorer import NpcArmor
 from turns import Turns
+from enemy import Enemy
 
 def main():
     engine = league.Engine("Path of Darkness")
@@ -31,12 +32,15 @@ def main():
   #  engine.drawables.add(water_lvl_asset.passable.sprites())
 
     # Create the player and give him a position and overlay
-    player = Player("girl_big.png", 3, 400, 250)
+    player = Player("playerBase.png", 3, 400, 250)
     player_overlay = Overlay(player)
 
     # create an enemy to figure out how to do damage. Using the player since he
     # has all of the attacks and abilities I do
-    enemy = Player("naked_man_with_long_sword.png", 3, 400, 400)
+    enemy = Enemy("naked_man_with_long_sword.png", 3, 400, 400, attack_to_animate = 1, health = 100, damage = 10)
+    enemy_2 = Enemy("ork.png", 3, 500, 500, attack_to_animate = 2, health = 200, damage = 100)
+
+    enemies = [enemy, enemy_2]
 
     # Create npcBlacksmith and give position
     npcBlacksmith = Npc(2, 100, 500)
@@ -60,13 +64,17 @@ def main():
     player.rect = player.image.get_rect()
     enemy.world_size = world_size
     enemy.rect = enemy.image.get_rect()
+    enemy_2.world_size = world_size
+    enemy_2.rect = enemy.image.get_rect()
 
     # Add the player to the engine
     engine.objects.append(player)
     engine.drawables.add(player)
     engine.objects.append(enemy)
     engine.drawables.add(enemy)
-    # engine.drawables.add(player_overlay)
+    engine.objects.append(enemy_2)
+    engine.drawables.add(enemy_2)
+    engine.drawables.add(player_overlay)
 
     # Add the NPCs to the engine
     # engine.objects.append(npcBlacksmith)
@@ -78,13 +86,13 @@ def main():
     engine.drawables.add(npcArmorer)
 
     # interface for the turn system
-    turns = Turns(player, enemy, engine)
+    turns = Turns(player, enemies, engine)
 
     # create the camera and add it to the engine
     camera = league.LessDumbCamera(800, 600, player, engine.drawables, world_size)
     # camera = league.DumbCamera(800, 600, player, engine.drawables, world_size)
     engine.objects.append(camera)
-    # engine.objects.append(player_overlay)
+    engine.objects.append(player_overlay)
 
     # look for different events in the game and call their methods
     # engine.collisions[player] = (q, player.ouch)

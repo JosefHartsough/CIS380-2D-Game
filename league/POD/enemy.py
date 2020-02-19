@@ -9,7 +9,7 @@ import time
 import sys
 
 
-class Player(Character, Handle_Animations, Change_Scene):
+class Enemy(Character, Handle_Animations, Change_Scene):
     """
     This is a sample class for a player object.  A player
     is a character, is a drawable, and an updateable object.
@@ -18,13 +18,13 @@ class Player(Character, Handle_Animations, Change_Scene):
     written as a demo but should direction.
     """
 
-    def __init__(self, sprites_to_use, z=0, x=0, y=0):
+    def __init__(self, sprites_to_use, z=0, x=0, y=0, attack_to_animate = 1, health = 100, damage = 69):
         super().__init__(z, x, y)
 
         # What sprites am I not allowd to cross?
         self.blocks = pygame.sprite.Group()
         # This unit's health
-        self.health = 100
+        self.health = health
         # Last time I was hit
         self.last_hit = pygame.time.get_ticks()
         # A unit-less value. Bigger is faster. Changes player speed
@@ -36,6 +36,12 @@ class Player(Character, Handle_Animations, Change_Scene):
 
         # images to pull from
         self.sprites_to_use = sprites_to_use
+
+        # attack to animate
+        self.attack_to_animate = attack_to_animate
+
+        # attack damage
+        self.attack_damage = damage
 
         # these are the rows on the sprite sheet that correspond with him walking
         self.walk_up_row = 8
@@ -122,20 +128,25 @@ class Player(Character, Handle_Animations, Change_Scene):
         for row in walking_rows:
             self.images[Player_State.WALK].update(self.animate_walking(row))
 
-        for row in attacking_rows_1:
-            self.images[Player_State.ATTACK_1].update(self.animate_attacking_1(row, self.num_animations_to_attack_1))
+        if attack_to_animate == 1:
+            for row in attacking_rows_1:
+                self.images[Player_State.ATTACK_1].update(self.animate_attacking_1(row, self.num_animations_to_attack_1))
 
-        for row in attacking_rows_2:
-            self.images[Player_State.ATTACK_2].update(self.animate_attacking_2(row, self.num_animations_to_attack_2))
-        
-        for row in attacking_rows_3:
-            self.images[Player_State.ATTACK_3].update(self.animate_attacking_3(row, self.num_animations_to_attack_3))
+        elif attack_to_animate == 2:
+            for row in attacking_rows_2:
+                self.images[Player_State.ATTACK_2].update(self.animate_attacking_2(row, self.num_animations_to_attack_2))
 
-        for row in attacking_rows_4:
-            self.images[Player_State.ATTACK_4].update(self.animate_attacking_4(row, self.num_animations_to_attack_4))
+        elif attack_to_animate == 3:
+            for row in attacking_rows_3:
+                self.images[Player_State.ATTACK_3].update(self.animate_attacking_3(row, self.num_animations_to_attack_3))
 
-        for row in attacking_rows_5:
-            self.images[Player_State.ATTACK_5].update(self.animate_attacking_5(row, self.num_animations_to_attack_5))
+        elif attack_to_animate == 4:
+            for row in attacking_rows_4:
+                self.images[Player_State.ATTACK_4].update(self.animate_attacking_4(row, self.num_animations_to_attack_4))
+
+        elif attack_to_animate == 5:
+            for row in attacking_rows_5:
+                self.images[Player_State.ATTACK_5].update(self.animate_attacking_5(row, self.num_animations_to_attack_5))
 
 
         # Give our person an initial spawned in orientation
@@ -263,6 +274,18 @@ class Player(Character, Handle_Animations, Change_Scene):
             self.collider.rect.y = sprite.y
             if pygame.sprite.collide_rect(self, self.collider):
                 self.collisions.append(sprite)
+
+    def choose_attack(self, time):
+        if self.attack_to_animate == 1:
+            self.attack_1(time)
+        elif self.attack_to_animate == 2:
+            self.attack_2(time)
+        elif self.attack_to_animate == 3:
+            self.attack_3(time)
+        elif self.attack_to_animate == 4:
+            self.attack_4(time)
+        elif self.attack_to_animate == 5:
+            self.attack_5(time)
 
     def attack_1(self, time):
 
