@@ -99,7 +99,7 @@ class Player(Character, Handle_Animations, Change_Scene):
 
         # create animation needed variables
         self.tile_size = league.Settings.tile_size * 2
-        self.direction = Direction.SOUTH
+        self.direction = Moving.SOUTH
         self.state = Player_State.IDLE
         self.images = {}
         self.images[Player_State.WALK] = {}
@@ -171,7 +171,7 @@ class Player(Character, Handle_Animations, Change_Scene):
         self.collisions = []
         amount = self.delta * time
         self.state = Player_State.WALK
-        self.direction = Direction.WEST
+        self.direction = Moving.WEST
         self.image = pygame.Surface(
             (self.tile_size, self.tile_size), pygame.SRCALPHA).convert_alpha()
         self.update_self_variables()
@@ -194,7 +194,7 @@ class Player(Character, Handle_Animations, Change_Scene):
         self.collisions = []
         amount = self.delta * time
         self.state = Player_State.WALK
-        self.direction = Direction.EAST
+        self.direction = Moving.EAST
         self.image = pygame.Surface(
             (self.tile_size, self.tile_size), pygame.SRCALPHA).convert_alpha()
         self.update_self_variables()
@@ -217,7 +217,7 @@ class Player(Character, Handle_Animations, Change_Scene):
         self.collisions = []
         amount = self.delta * time
         self.state = Player_State.WALK
-        self.direction = Direction.NORTH
+        self.direction = Moving.NORTH
         self.image = pygame.Surface(
             (self.tile_size, self.tile_size), pygame.SRCALPHA).convert_alpha()
         self.update_self_variables()
@@ -241,7 +241,7 @@ class Player(Character, Handle_Animations, Change_Scene):
         self.collisions = []
         amount = self.delta * time
         self.state = Player_State.WALK
-        self.direction = Direction.SOUTH
+        self.direction = Moving.SOUTH
         self.image = pygame.Surface(
             (self.tile_size, self.tile_size), pygame.SRCALPHA).convert_alpha()
         self.update_self_variables()

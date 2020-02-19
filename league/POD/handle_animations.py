@@ -42,13 +42,13 @@ class Handle_Animations:
         for x in range(0, self.num_animations_to_walk):
             range_of_motion.append(self.pull_sprite(row, x))
         if row == self.walk_up_row:
-            images[Direction.NORTH] = range_of_motion
+            images[Moving.NORTH] = range_of_motion
         elif row == self.walk_left_row:
-            images[Direction.WEST] = range_of_motion
+            images[Moving.WEST] = range_of_motion
         elif row == self.walk_down_row:
-            images[Direction.SOUTH] = range_of_motion
+            images[Moving.SOUTH] = range_of_motion
         elif row == self.walk_right_row:
-            images[Direction.EAST] = range_of_motion
+            images[Moving.EAST] = range_of_motion
 
         return images
 
@@ -58,13 +58,13 @@ class Handle_Animations:
         for x in range(0, num_animations):
             range_of_motion.append(self.pull_sprite(row, x))
         if row == self.attack_1_up_row:
-            images[Direction.NORTH] = range_of_motion
+            images[Moving.NORTH] = range_of_motion
         elif row == self.attack_1_left_row:
-            images[Direction.WEST] = range_of_motion
+            images[Moving.WEST] = range_of_motion
         elif row == self.attack_1_down_row:
-            images[Direction.SOUTH] = range_of_motion
+            images[Moving.SOUTH] = range_of_motion
         elif row == self.attack_1_right_row:
-            images[Direction.EAST] = range_of_motion
+            images[Moving.EAST] = range_of_motion
 
         return images
 
@@ -74,13 +74,13 @@ class Handle_Animations:
         for x in range(0, num_animations):
             range_of_motion.append(self.pull_sprite(row, x))
         if row == self.attack_2_up_row:
-            images[Direction.NORTH] = range_of_motion
+            images[Moving.NORTH] = range_of_motion
         elif row == self.attack_2_left_row:
-            images[Direction.WEST] = range_of_motion
+            images[Moving.WEST] = range_of_motion
         elif row == self.attack_2_down_row:
-            images[Direction.SOUTH] = range_of_motion
+            images[Moving.SOUTH] = range_of_motion
         elif row == self.attack_2_right_row:
-            images[Direction.EAST] = range_of_motion
+            images[Moving.EAST] = range_of_motion
 
         return images
 
@@ -90,13 +90,13 @@ class Handle_Animations:
         for x in range(0, num_animations):
             range_of_motion.append(self.pull_sprite(row, x))
         if row == self.attack_3_up_row:
-            images[Direction.NORTH] = range_of_motion
+            images[Moving.NORTH] = range_of_motion
         elif row == self.attack_3_left_row:
-            images[Direction.WEST] = range_of_motion
+            images[Moving.WEST] = range_of_motion
         elif row == self.attack_3_down_row:
-            images[Direction.SOUTH] = range_of_motion
+            images[Moving.SOUTH] = range_of_motion
         elif row == self.attack_3_right_row:
-            images[Direction.EAST] = range_of_motion
+            images[Moving.EAST] = range_of_motion
 
         return images
 
@@ -106,13 +106,13 @@ class Handle_Animations:
         for x in range(0, num_animations):
             range_of_motion.append(self.pull_sprite(row, x))
         if row == self.attack_4_up_row:
-            images[Direction.NORTH] = range_of_motion
+            images[Moving.NORTH] = range_of_motion
         elif row == self.attack_4_left_row:
-            images[Direction.WEST] = range_of_motion
+            images[Moving.WEST] = range_of_motion
         elif row == self.attack_4_down_row:
-            images[Direction.SOUTH] = range_of_motion
+            images[Moving.SOUTH] = range_of_motion
         elif row == self.attack_4_right_row:
-            images[Direction.EAST] = range_of_motion
+            images[Moving.EAST] = range_of_motion
 
         return images
 
@@ -122,12 +122,12 @@ class Handle_Animations:
         for x in range(0, num_animations):
             range_of_motion.append(self.pull_sprite(row, x * 3 + 0, max_row_length = 24, num_rows=35, image_size = 192))
         if row == self.attack_5_up_row:
-            images[Direction.NORTH] = range_of_motion
+            images[Moving.NORTH] = range_of_motion
         elif row == self.attack_5_left_row:
-            images[Direction.WEST] = range_of_motion
+            images[Moving.WEST] = range_of_motion
         elif row == self.attack_5_down_row:
-            images[Direction.SOUTH] = range_of_motion
+            images[Moving.SOUTH] = range_of_motion
         elif row == self.attack_5_right_row:
-            images[Direction.EAST] = range_of_motion
+            images[Moving.EAST] = range_of_motion
 
         return images

@@ -17,13 +17,13 @@ class Moving(IntEnum):
     """Direction is an enumeration of the cardinal directions.
     Enumerated counter-clockwise.
     """
-    NORTH = 0
+    NORTH = 8
     NORTH_WEST = 1
-    WEST = 2
+    WEST = 9
     SOUTH_WEST = 3
-    SOUTH = 4
+    SOUTH = 10
     SOUTH_EAST = 5
-    EAST = 6
+    EAST = 11
     NORTH_EAST = 7
 
 from enum import IntEnum
@@ -32,7 +32,7 @@ class Attack_Damage(IntEnum):
     These are the values for each attack
     """
     FIRST_ATTACK = 50
-    SECOND_ATTACK = 10
+    SECOND_ATTACK = 50
     THIRD_ATTACK = 10
     FOURTH_ATTACK = 10
     FIFTH_ATTACK = 50

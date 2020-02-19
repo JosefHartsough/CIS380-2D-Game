@@ -76,7 +76,7 @@ class NpcAlchemist(Character, Handle_Animations):
            
 
         self.tile_size = league.Settings.tile_size * 2
-        self.direction = Direction.WEST
+        self.direction = Moving.WEST
         self.state = Player_State.IDLE
         self.images = {}
         self.frame = 0

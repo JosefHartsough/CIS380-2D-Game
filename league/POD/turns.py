@@ -8,6 +8,7 @@ from change_scene import Change_Scene
 import time
 import sys
 from player import Player
+import random
 
 
 class Turns():
@@ -21,8 +22,22 @@ class Turns():
         self.has_not_hit_up = True
         self.has_not_hit_down = True
         self.enemy.turn = False
-        self.last_move = pygame.time.get_ticks()
 
+        self.last_attack_was_1 = False
+        self.last_attack_was_2 = False
+        self.last_attack_was_3 = False
+        self.last_attack_was_4 = False
+        self.last_attack_was_5 = False
+
+        self.all_attacks = {
+            1: False, # last attack was 1
+            2: False, # last attack was 2
+            3: False, # last attack was 3
+            4: False, # last attack was 4
+            5: False  # last attack was 5
+        }
+
+        self.player_movement = []
 
     ###########################################################################
     # Movement stuff
@@ -34,8 +49,18 @@ class Turns():
                 self.player_before_x = self.player.x
                 self.player_before_y = self.player.y
             if abs(self.player_before_x - self.player.x) <= self.player.tile_size:
-                if abs(self.player_before_x - self.player.x) > self.player.tile_size // 2:
-                    self.turn_off_inputs_except(pygame.K_a)
+                self.player_movement.append((self.player.x, self.player.y))
+                if len(self.player_movement) > 3:
+                    # check if the player hasn't been able to move
+                    if(abs(self.player_movement[-1][0] - self.player_movement[-3][0]) < 1 and
+                       abs(self.player_movement[-1][1] - self.player_movement[-3][1] < 1)):
+                        self.engine.key_events[pygame.K_a] = self.move_left
+                        self.engine.key_events[pygame.K_d] = self.move_right
+                        self.engine.key_events[pygame.K_w] = self.move_up
+                        self.engine.key_events[pygame.K_s] = self.move_down
+                    else:
+                        if abs(self.player_before_x - self.player.x) > self.player.tile_size // 2:
+                            self.turn_off_inputs_except(pygame.K_a)
                 self.player.move_left(time)
             else:
                 self.player.turn = False
@@ -49,10 +74,20 @@ class Turns():
             if self.has_not_hit_right:
                 self.player_before_x = self.player.x
                 self.player_before_y = self.player.y
-            self.last_move = pygame.time.get_ticks()
             if abs(self.player_before_x - self.player.x) <= self.player.tile_size:
-                if abs(self.player_before_x - self.player.x) > self.player.tile_size // 2:
-                    self.turn_off_inputs_except(pygame.K_d)
+                self.player_movement.append((self.player.x, self.player.y))
+                if len(self.player_movement) > 3:
+                    # check if the player hasn't been able to move
+                    if(abs(self.player_movement[-1][0] - self.player_movement[-3][0]) < 1 and
+                       abs(self.player_movement[-1][1] - self.player_movement[-3][1] < 1)):
+                        print("no movement")
+                        self.engine.key_events[pygame.K_a] = self.move_left
+                        self.engine.key_events[pygame.K_d] = self.move_right
+                        self.engine.key_events[pygame.K_w] = self.move_up
+                        self.engine.key_events[pygame.K_s] = self.move_down
+                    else:
+                        if abs(self.player_before_x - self.player.x) > self.player.tile_size // 2:
+                            self.turn_off_inputs_except(pygame.K_d)
                 self.player.move_right(time)
             else:
                 self.player.turn = False
@@ -67,13 +102,24 @@ class Turns():
                 self.player_before_x = self.player.x
                 self.player_before_y = self.player.y
             if abs(self.player_before_y - self.player.y) <= self.player.tile_size:
-                if abs(self.player_before_y - self.player.y) > self.player.tile_size // 2:
-                    self.turn_off_inputs_except(pygame.K_w)
+                self.player_movement.append((self.player.x, self.player.y))
+                if len(self.player_movement) > 3:
+                    # check if the player hasn't been able to move
+                    if(abs(self.player_movement[-1][0] - self.player_movement[-3][0]) < 1 and
+                       abs(self.player_movement[-1][1] - self.player_movement[-3][1] < 1)):
+                        self.engine.key_events[pygame.K_a] = self.move_left
+                        self.engine.key_events[pygame.K_d] = self.move_right
+                        self.engine.key_events[pygame.K_w] = self.move_up
+                        self.engine.key_events[pygame.K_s] = self.move_down
+                    else:
+                        if abs(self.player_before_y - self.player.y) > self.player.tile_size // 2:
+                            self.turn_off_inputs_except(pygame.K_w)
                 self.player.move_up(time)
             else:
                 self.player.turn = False
             self.has_not_hit_up = False
         else:
+
             self.engine.key_events[pygame.K_w] = self.ghetto_stop
             self.move_enemies(time)
 
@@ -83,8 +129,18 @@ class Turns():
                 self.player_before_x = self.player.x
                 self.player_before_y = self.player.y
             if abs(self.player_before_y - self.player.y) <= self.player.tile_size:
-                if abs(self.player_before_y - self.player.y) > self.player.tile_size // 2:
-                    self.turn_off_inputs_except(pygame.K_s)
+                self.player_movement.append((self.player.x, self.player.y))
+                if len(self.player_movement) > 3:
+                    # check if the player hasn't been able to move
+                    if(abs(self.player_movement[-1][0] - self.player_movement[-3][0]) < 1 and
+                       abs(self.player_movement[-1][1] - self.player_movement[-3][1] < 1)):
+                        self.engine.key_events[pygame.K_a] = self.move_left
+                        self.engine.key_events[pygame.K_d] = self.move_right
+                        self.engine.key_events[pygame.K_w] = self.move_up
+                        self.engine.key_events[pygame.K_s] = self.move_down
+                    else:
+                        if abs(self.player_before_y - self.player.y) > self.player.tile_size // 2:
+                            self.turn_off_inputs_except(pygame.K_s)
                 self.player.move_down(time)
             else:
                 self.player.turn = False
@@ -92,6 +148,137 @@ class Turns():
         else:
             self.engine.key_events[pygame.K_s] = self.ghetto_stop
             self.move_enemies(time)
+
+    ###########################################################################
+    # Attacking stuff
+    ###########################################################################
+
+    def attack_1(self, time):
+        if self.player.turn:
+            if not self.all_attacks[1]:
+                if self.player.attack_1_finished:
+                    if self.check_damage_small_weapon():
+                        self.enemy.health -= Attack_Damage.FIRST_ATTACK
+                    self.player.turn = False
+                    loc_in_sprite_sheet = self.player.pull_sprite(self.player.direction, 0, file = self.player.sprites_to_use)
+                    self.player.update_sprite(loc_in_sprite_sheet, offset_x = 0)
+                    self.control_last_attack(1)
+                else:
+                    self.player.attack_1(time)
+                    self.turn_off_inputs_except(pygame.K_1)
+                    if self.enemy in self.engine.objects:
+                        self.remove_enemy()
+        else:
+            self.engine.key_events[pygame.K_1] = self.ghetto_stop
+            self.move_enemies(time)
+
+    def attack_2(self, time):
+        if self.player.turn:
+            if not self.all_attacks[2]:
+                if self.player.attack_2_finished:
+                    if self.check_damage_small_weapon():
+                        self.enemy.health -= Attack_Damage.SECOND_ATTACK
+                    self.player.turn = False
+                    loc_in_sprite_sheet = self.player.pull_sprite(self.player.direction, 0, file = self.player.sprites_to_use)
+                    self.player.update_sprite(loc_in_sprite_sheet, offset_x = 0)
+                    self.control_last_attack(2)
+                else:
+                    self.player.attack_2(time)
+                    self.turn_off_inputs_except(pygame.K_2)
+                    if self.enemy in self.engine.objects:
+                        self.remove_enemy()
+        else:
+            self.engine.key_events[pygame.K_2] = self.ghetto_stop
+            self.move_enemies(time)
+
+
+    def attack_3(self, time):
+        if self.player.turn:
+            if not self.all_attacks[3]:
+                if self.player.attack_3_finished:
+                    if self.check_damage_small_weapon():
+                        self.enemy.health -= Attack_Damage.THIRD_ATTACK
+                    self.player.turn = False
+                    loc_in_sprite_sheet = self.player.pull_sprite(self.player.direction, 0, file = self.player.sprites_to_use)
+                    self.player.update_sprite(loc_in_sprite_sheet, offset_x = 0)
+                    self.control_last_attack(3)
+                else:
+                    self.player.attack_3(time)
+                    self.turn_off_inputs_except(pygame.K_3)
+                    if self.enemy in self.engine.objects:
+                        self.remove_enemy()
+        else:
+            self.engine.key_events[pygame.K_3] = self.ghetto_stop
+            self.move_enemies(time)
+
+
+    def attack_4(self, time):
+        if self.player.turn:
+            if not self.all_attacks[4]:
+                if self.player.attack_4_finished:
+                    if self.check_damage_small_weapon():
+                        self.enemy.health -= Attack_Damage.FOURTH_ATTACK
+                    self.player.turn = False
+                    loc_in_sprite_sheet = self.player.pull_sprite(self.player.direction, 0, file = self.player.sprites_to_use)
+                    self.player.update_sprite(loc_in_sprite_sheet, offset_x = 0)
+                    self.control_last_attack(4)
+                else:
+                    self.player.attack_4(time)
+                    self.turn_off_inputs_except(pygame.K_4)
+                    if self.enemy in self.engine.objects:
+                        self.remove_enemy()
+        else:
+            self.engine.key_events[pygame.K_4] = self.ghetto_stop
+            self.move_enemies(time)
+
+
+    def attack_5(self, time):
+        if self.player.turn:
+            if not self.all_attacks[5]:
+                if self.player.attack_5_finished:
+                    if self.check_damage_big_weapon():
+                        self.enemy.health -= Attack_Damage.FIFTH_ATTACK
+                    self.player.turn = False
+                    loc_in_sprite_sheet = self.player.pull_sprite(self.player.direction, 0, file = self.player.sprites_to_use)
+                    self.player.update_sprite(loc_in_sprite_sheet, offset_x = 0)
+                    self.control_last_attack(5)
+                else:
+                    self.player.attack_5(time)
+                    self.turn_off_inputs_except(pygame.K_5)
+                    if self.enemy in self.engine.objects:
+                        self.remove_enemy()
+        else:
+            self.engine.key_events[pygame.K_5] = self.ghetto_stop
+            self.move_enemies(time)
+
+    def check_damage_small_weapon(self):
+        if abs(self.player.x - self.enemy.x) < 64 and abs(self.player.y - self.enemy.y) < 64:
+            return True
+        else:
+            return False
+
+    def check_damage_big_weapon(self):
+        if abs(self.player.x - self.enemy.x) - 85 < 64 and abs(self.player.y - self.enemy.y) - 65 < 64:
+            return True
+        else:
+            return False
+
+    def remove_enemy(self):
+        if self.enemy.health <= 0:
+            self.engine.objects.remove(self.enemy)
+            self.engine.drawables.remove(self.enemy)
+
+    def control_last_attack(self, last_attack):
+        for attack in self.all_attacks.keys():
+            if attack == last_attack:
+                self.all_attacks[attack] = True
+            else:
+                self.all_attacks[attack] = False
+        self.player.update_self_variables()
+
+    ###########################################################################
+    # Helper Functions
+    ###########################################################################
 
     def move_enemies(self, time):
         """
@@ -105,30 +292,83 @@ class Turns():
         before_y = self.enemy.y
         dist_from_x = abs(self.enemy.x - self.player.x)
         dist_from_y = abs(self.enemy.y - self.player.y)
+        path = []
+        # I randomly chose 50 just to give it enough cycles to move 64 pixels
         for x in range(0, 50):
+            # track enemy position
+            path.append((self.enemy.x, self.enemy.y))
+            # move in the x direction
             if dist_from_x >= dist_from_y:
+                # if the player is to my left
                 if self.enemy.x >= self.player.x:
                     if abs(before_x - self.enemy.x) <= self.player.tile_size:
-                        self.enemy.move_left(time)
+                        if len(path) > 3:
+                            # If I have not moved, go in a random direction
+                            if abs(path[x][0] - path[x-2][0]) < 1 and abs(path[x][1] - path[x-2][1] < 1):
+                                self.move_randomly(self.enemy, {"left"}, time)
+                            else:
+                                self.enemy.move_left(time)
+                        else:
+                            self.enemy.move_left(time)
                     else:
                         break
+                # if the player is to my right
                 else:
                     if abs(before_x - self.enemy.x) <= self.player.tile_size:
-                        self.enemy.move_right(time)
+                        if len(path) > 3:
+                            # If I have not moved, go in a random direction
+                            if abs(path[x][0] - path[x-2][0]) < 1 and abs(path[x][1] - path[x-2][1] < 1):
+                                self.move_randomly(self.enemy, {"right"}, time)
+                            else:
+                                self.enemy.move_right(time)
+                        else:
+                            self.enemy.move_right(time)
                     else:
                         break
+            # move in the y direction
             else:
+                # if the player is above me
                 if self.enemy.y >= self.player.y:
                     if abs(before_y - self.enemy.y) <= self.player.tile_size:
-                        self.enemy.move_up(time)
+                        if len(path) > 3:
+                            # If I have not moved, go in a random direction
+                            if abs(path[x][0] - path[x-2][0]) < 1 and abs(path[x][1] - path[x-2][1] < 1):
+                                self.move_randomly(self.enemy, {"up"}, time)
+                            else:
+                                self.enemy.move_up(time)
+                        else:
+                            self.enemy.move_up(time)
                     else:
                         break
+                # if the player is below me
                 else:
                     if abs(before_y - self.enemy.y) <= self.player.tile_size:
-                        self.enemy.move_down(time)
+                        if len(path) > 3:
+                            # If I have not moved, go in a random direction
+                            if abs(path[x][0] - path[x-2][0]) < 1 and abs(path[x][1] - path[x-2][1] < 1):
+                                self.move_randomly(self.enemy, {"down"}, time)
+                            else:
+                                self.enemy.move_down(time)
+                        else:
+                            self.enemy.move_down(time)
                     else:
                         break
         self.reset_variables()
+
+
+    def move_randomly(self, sprite_to_move, direction_to_not_move, time):
+        # do set subtraction to figure out which direction to go and then
+        # randomly pick from that result
+        choice = random.choice(tuple({"up", "down", "left", "right"} - direction_to_not_move))
+        if choice == "up":
+            sprite_to_move.move_up(time)
+        elif choice == "down":
+            sprite_to_move.move_down(time)
+        elif choice == "left":
+            sprite_to_move.move_left(time)
+        elif choice == "right":
+            sprite_to_move.move_right(time)
+
 
 
     def ghetto_stop(self, time):
@@ -150,103 +390,10 @@ class Turns():
         self.engine.key_events[pygame.K_3] = self.attack_3
         self.engine.key_events[pygame.K_4] = self.attack_4
         self.engine.key_events[pygame.K_5] = self.attack_5
+        self.player_movement.clear()
+
 
     def turn_off_inputs_except(self, keep_input):
         for event in list(self.engine.key_events):
             if event != keep_input:
                 self.engine.key_events.pop(event)
-
-    ###########################################################################
-    # Attacking stuff
-    ###########################################################################
-
-    def attack_1(self, time):
-        if self.player.turn:
-            if self.player.attack_1_finished:
-                if self.check_damage_small_weapon():
-                    self.enemy.health -= Attack_Damage.FIRST_ATTACK
-                self.player.turn = False
-            else:
-                self.player.attack_1(time)
-                self.turn_off_inputs_except(pygame.K_1)
-            if self.enemy in self.engine.objects:
-                self.remove_enemy()
-        else:
-            self.engine.key_events[pygame.K_1] = self.ghetto_stop
-            self.move_enemies(time)
-
-    def attack_2(self, time):
-        if self.player.turn:
-            self.turn_off_inputs_except(pygame.K_2)
-            self.player.attack_2(time)
-            if self.player.attack_2_finished:
-                if self.check_damage_small_weapon():
-                    self.enemy.health -= Attack_Damage.SECOND_ATTACK
-                self.player.turn = False
-            if self.enemy in self.engine.objects:
-                self.remove_enemy()
-        else:
-            self.engine.key_events[pygame.K_2] = self.ghetto_stop
-            self.move_enemies(time)
-
-
-    def attack_3(self, time):
-        if self.player.turn:
-            self.turn_off_inputs_except(pygame.K_3)
-            self.player.attack_3(time)
-            if self.player.attack_3_finished:
-                if self.check_damage_small_weapon():
-                    self.enemy.health -= Attack_Damage.THIRD_ATTACK
-                self.player.turn = False
-            if self.enemy in self.engine.objects:
-                self.remove_enemy()
-        else:
-            self.engine.key_events[pygame.K_3] = self.ghetto_stop
-            self.move_enemies(time)
-
-
-    def attack_4(self, time):
-        if self.player.turn:
-            self.turn_off_inputs_except(pygame.K_4)
-            self.player.attack_4(time)
-            if self.player.attack_4_finished:
-                if self.check_damage_small_weapon():
-                    self.enemy.health -= Attack_Damage.FOURTH_ATTACK
-                self.player.turn = False
-            if self.enemy in self.engine.objects:
-                self.remove_enemy()
-        else:
-            self.engine.key_events[pygame.K_4] = self.ghetto_stop
-            self.move_enemies(time)
-
-
-    def attack_5(self, time):
-        if self.player.turn:
-            self.turn_off_inputs_except(pygame.K_5)
-            self.player.attack_5(time)
-            if self.player.attack_5_finished:
-                if self.check_damage_big_weapon():
-                    self.enemy.health -= Attack_Damage.FIFTH_ATTACK
-                self.player.turn = False
-            if self.enemy in self.engine.objects:
-                self.remove_enemy()
-        else:
-            self.engine.key_events[pygame.K_5] = self.ghetto_stop
-            self.move_enemies(time)
-
-    def check_damage_small_weapon(self):
-        if abs(self.player.x - self.enemy.x) < 64 and abs(self.player.y - self.enemy.y) < 64:
-            return True
-        else:
-            return False
-
-    def check_damage_big_weapon(self):
-        if abs(self.player.x - self.enemy.x) - 85 < 64 and abs(self.player.y - self.enemy.y) - 65 < 64:
-            return True
-        else:
-            return False
-
-    def remove_enemy(self):
-        if self.enemy.health <= 0:
-            self.engine.objects.remove(self.enemy)
-            self.engine.drawables.remove(self.enemy)

@@ -103,7 +103,7 @@ class Player(Character, Handle_Animations, Change_Scene):
 
         # create animation needed variables
         self.tile_size = league.Settings.tile_size * 2
-        self.direction = Direction.SOUTH
+        self.direction = Moving.SOUTH
         self.state = Player_State.IDLE
         self.images = {}
         self.images[Player_State.WALK] = {}
@@ -125,8 +125,8 @@ class Player(Character, Handle_Animations, Change_Scene):
         for row in attacking_rows_1:
             self.images[Player_State.ATTACK_1].update(self.animate_attacking_1(row, self.num_animations_to_attack_1))
         #
-        # for row in attacking_rows_2:
-        #     self.images[Player_State.ATTACK_2].update(self.animate_attacking_2(row, self.num_animations_to_attack_2))
+        for row in attacking_rows_2:
+            self.images[Player_State.ATTACK_2].update(self.animate_attacking_2(row, self.num_animations_to_attack_2))
         #
         # for row in attacking_rows_3:
         #     self.images[Player_State.ATTACK_3].update(self.animate_attacking_3(row, self.num_animations_to_attack_3))
@@ -161,8 +161,7 @@ class Player(Character, Handle_Animations, Change_Scene):
         # don't have to create more memory each iteration of
         # collision detection.
         self.collider = Drawable()
-        self.collider.image = pygame.Surface(
-            [Settings.tile_size, Settings.tile_size])
+        self.collider.image = pygame.Surface([Settings.tile_size, Settings.tile_size])
         self.collider.rect = self.collider.image.get_rect()
         # Overlay
         self.font = pygame.font.Font('freesansbold.ttf', 32)
@@ -173,9 +172,8 @@ class Player(Character, Handle_Animations, Change_Scene):
         self.collisions = []
         amount = self.delta * time
         self.state = Player_State.WALK
-        self.direction = Direction.WEST
-        self.image = pygame.Surface(
-            (self.tile_size, self.tile_size), pygame.SRCALPHA).convert_alpha()
+        self.direction = Moving.WEST
+        self.image = pygame.Surface((self.tile_size, self.tile_size), pygame.SRCALPHA).convert_alpha()
         self.update_self_variables()
         try:
             if self.x - amount < 0:
@@ -184,8 +182,7 @@ class Player(Character, Handle_Animations, Change_Scene):
                 self.x = self.x - amount
                 self.update(0)
                 self.frame = (self.frame + 1) % Settings.fps
-                self.update_sprite(
-                    self.images[self.state][self.direction][self.frame % self.num_animations_to_walk])
+                self.update_sprite(self.images[self.state][self.direction][self.frame % self.num_animations_to_walk])
                 while(len(self.collisions) != 0):
                     self.x = self.x + amount
                     self.update(0)
@@ -196,9 +193,8 @@ class Player(Character, Handle_Animations, Change_Scene):
         self.collisions = []
         amount = self.delta * time
         self.state = Player_State.WALK
-        self.direction = Direction.EAST
-        self.image = pygame.Surface(
-            (self.tile_size, self.tile_size), pygame.SRCALPHA).convert_alpha()
+        self.direction = Moving.EAST
+        self.image = pygame.Surface((self.tile_size, self.tile_size), pygame.SRCALPHA).convert_alpha()
         self.update_self_variables()
         try:
             if self.x + amount > self.world_size[0] - Settings.tile_size:
@@ -207,8 +203,7 @@ class Player(Character, Handle_Animations, Change_Scene):
                 self.x = self.x + amount
                 self.update(0)
                 self.frame = (self.frame + 1) % Settings.fps
-                self.update_sprite(
-                    self.images[self.state][self.direction][self.frame % self.num_animations_to_walk])
+                self.update_sprite(self.images[self.state][self.direction][self.frame % self.num_animations_to_walk])
                 while(len(self.collisions) != 0):
                     self.x = self.x - amount
                     self.update(0)
@@ -219,9 +214,8 @@ class Player(Character, Handle_Animations, Change_Scene):
         self.collisions = []
         amount = self.delta * time
         self.state = Player_State.WALK
-        self.direction = Direction.NORTH
-        self.image = pygame.Surface(
-            (self.tile_size, self.tile_size), pygame.SRCALPHA).convert_alpha()
+        self.direction = Moving.NORTH
+        self.image = pygame.Surface((self.tile_size, self.tile_size), pygame.SRCALPHA).convert_alpha()
         self.update_self_variables()
         try:
             if self.y - amount < 0:
@@ -230,8 +224,7 @@ class Player(Character, Handle_Animations, Change_Scene):
                 self.y = self.y - amount
                 self.update(0)
                 self.frame = (self.frame + 1) % Settings.fps
-                self.update_sprite(
-                    self.images[self.state][self.direction][self.frame % self.num_animations_to_walk])
+                self.update_sprite(self.images[self.state][self.direction][self.frame % self.num_animations_to_walk])
                 if len(self.collisions) != 0:
                     self.y = self.y + amount
                     self.update(0)
@@ -243,9 +236,8 @@ class Player(Character, Handle_Animations, Change_Scene):
         self.collisions = []
         amount = self.delta * time
         self.state = Player_State.WALK
-        self.direction = Direction.SOUTH
-        self.image = pygame.Surface(
-            (self.tile_size, self.tile_size), pygame.SRCALPHA).convert_alpha()
+        self.direction = Moving.SOUTH
+        self.image = pygame.Surface((self.tile_size, self.tile_size), pygame.SRCALPHA).convert_alpha()
         self.update_self_variables()
         try:
             if self.y + amount > self.world_size[1] - Settings.tile_size:
@@ -254,8 +246,7 @@ class Player(Character, Handle_Animations, Change_Scene):
                 self.y = self.y + amount
                 self.update(0)
                 self.frame = (self.frame + 1) % Settings.fps
-                self.update_sprite(
-                    self.images[self.state][self.direction][self.frame % self.num_animations_to_walk])
+                self.update_sprite(self.images[self.state][self.direction][self.frame % self.num_animations_to_walk])
                 if len(self.collisions) != 0:
                     self.y = self.y - amount
                     self.update(0)
@@ -280,18 +271,16 @@ class Player(Character, Handle_Animations, Change_Scene):
             self.last_hit = now
 
     def attack_1(self, time):
-        self.attack_1_finished = False
+
         if self.attack_1_animation < self.num_animations_to_attack_1:
             self.collisions = []
             amount = self.delta * time
             self.state = Player_State.ATTACK_1
-            self.image = pygame.Surface(
-                (self.tile_size, self.tile_size), pygame.SRCALPHA).convert_alpha()
+            self.image = pygame.Surface((self.tile_size, self.tile_size), pygame.SRCALPHA).convert_alpha()
             try:
                 self.update(0)
                 self.frame = (self.frame + 1) % Settings.fps
-                self.update_sprite(
-                    self.images[self.state][self.direction][self.attack_1_animation])
+                self.update_sprite(self.images[self.state][self.direction][self.attack_1_animation])
                 self.attack_1_animation += 1
             except:
                 pass
@@ -300,18 +289,16 @@ class Player(Character, Handle_Animations, Change_Scene):
             self.attack_1_animation += 1
 
     def attack_2(self, time):
-        self.attack_2_finished = False
+
         if self.attack_2_animation < self.num_animations_to_attack_2:
             self.collisions = []
             amount = self.delta * time
             self.state = Player_State.ATTACK_2
-            self.image = pygame.Surface(
-                (self.tile_size, self.tile_size), pygame.SRCALPHA).convert_alpha()
+            self.image = pygame.Surface((self.tile_size, self.tile_size), pygame.SRCALPHA).convert_alpha()
             try:
                 self.update(0)
                 self.frame = (self.frame + 1) % Settings.fps
-                self.update_sprite(
-                    self.images[self.state][self.direction][self.attack_2_animation])
+                self.update_sprite(self.images[self.state][self.direction][self.attack_2_animation])
                 self.attack_2_animation += 1
             except:
                 pass
@@ -320,18 +307,16 @@ class Player(Character, Handle_Animations, Change_Scene):
             self.attack_2_animation += 1
 
     def attack_3(self, time):
-        self.attack_3_finished = False
+
         if self.attack_3_animation < self.num_animations_to_attack_3:
             self.collisions = []
             amount = self.delta * time
             self.state = Player_State.ATTACK_3
-            self.image = pygame.Surface(
-                (self.tile_size, self.tile_size), pygame.SRCALPHA).convert_alpha()
+            self.image = pygame.Surface((self.tile_size, self.tile_size), pygame.SRCALPHA).convert_alpha()
             try:
                 self.update(0)
                 self.frame = (self.frame + 1) % Settings.fps
-                self.update_sprite(
-                    self.images[self.state][self.direction][self.attack_3_animation])
+                self.update_sprite(self.images[self.state][self.direction][self.attack_3_animation])
                 self.attack_3_animation += 1
             except:
                 pass
@@ -340,18 +325,16 @@ class Player(Character, Handle_Animations, Change_Scene):
             self.attack_3_animation += 1
 
     def attack_4(self, time):
-        self.attack_4_finished = False
+
         if self.attack_4_animation < self.num_animations_to_attack_4:
             self.collisions = []
             amount = self.delta * time
             self.state = Player_State.ATTACK_4
-            self.image = pygame.Surface(
-                (self.tile_size, self.tile_size), pygame.SRCALPHA).convert_alpha()
+            self.image = pygame.Surface((self.tile_size, self.tile_size), pygame.SRCALPHA).convert_alpha()
             try:
                 self.update(0)
                 self.frame = (self.frame + 1) % Settings.fps
-                self.update_sprite(
-                    self.images[self.state][self.direction][self.attack_4_animation])
+                self.update_sprite(self.images[self.state][self.direction][self.attack_4_animation])
                 self.attack_4_animation += 1
             except:
                 pass
@@ -360,7 +343,7 @@ class Player(Character, Handle_Animations, Change_Scene):
             self.attack_4_animation += 1
 
     def attack_5(self, time):
-        self.attack_5_finished = False
+
         if self.has_not_hit_5:
             self.before_x = self.x
             self.before_y = self.y
@@ -390,6 +373,11 @@ class Player(Character, Handle_Animations, Change_Scene):
         self.attack_3_animation = 0
         self.attack_4_animation = 0
         self.attack_5_animation = 0
+        self.attack_1_finished = False
+        self.attack_2_finished = False
+        self.attack_3_finished = False
+        self.attack_4_finished = False
+        self.attack_5_finished = False
         if not self.has_not_hit_5:
             self.x = self.before_x
             self.y = self.before_y
