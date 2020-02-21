@@ -9,6 +9,7 @@ from alchemist import NpcAlchemist
 from armorer import NpcArmor
 from turns import Turns
 from enemy import Enemy
+from operator import itemgetter
 
 def main():
     engine = league.Engine("Path of Darkness")
@@ -35,56 +36,57 @@ def main():
     player = Player("playerBase.png", 3, 400, 250)
     player_overlay = Overlay(player)
 
+
+              
     # create an enemy to figure out how to do damage. Using the player since he
     # has all of the attacks and abilities I do
     enemy = Enemy("naked_man_with_long_sword.png", 3, 400, 400, attack_to_animate = 1, health = 100, damage = 10)
     enemy_2 = Enemy("ork.png", 3, 500, 500, attack_to_animate = 2, health = 200, damage = 100)
+    skeletonOne = Enemy("skeleton.png", 4, 1500, 1800, attack_to_animate = 1, health=100, damage=10 )
+    skeletonTwo = Enemy("skeleton.png", 4, 1500, 1800, attack_to_animate = 1, health=100, damage=10 )
+    skeletonThree = Enemy("skeleton.png", 4, 1500, 1800, attack_to_animate =1 , health=100, damage=10 )
+    skeletonFour = Enemy("skeleton.png", 4, 1500, 1800, attack_to_animate = 1, health=100, damage=10 )
+    skeletonFive = Enemy("skeleton.png", 4, 1500, 1800, attack_to_animate = 1, health=100, damage=10 )
+    dragonBoss = Enemy("dragon.png", 1, 400, 400, attack_to_animate = 1, health=100, damage=10 )
 
-    enemies = [enemy, enemy_2]
+    # Creates all our Npcs  
+    npcBlacksmith = Npc(2, 100, 500)                    #Blacksmith
+    npcAlchemist = NpcAlchemist(200, 600, 120)          #Alchemist
+    npcArmorer = NpcArmor(200, 700, 400)                #Armor
 
-    # Create npcBlacksmith and give position
-    npcBlacksmith = Npc(2, 100, 500)
+    # Array of our enemies
+    enemies = [enemy, enemy_2, skeletonOne, skeletonTwo, skeletonThree, skeletonFour, skeletonFive, dragonBoss]
 
-    # Create npcAlchemist and give position
-    npcAlchemist = NpcAlchemist(200, 600, 120)
+    # Array of our NPCs
+    npcList = [npcBlacksmith, npcAlchemist, npcArmorer]
 
-    # Create npcArmorer and give position
-    npcArmorer = NpcArmor(200, 700, 400)
+    
+    for i in enemies:
+      i.blocks.add(world_lvl_asset.impassable)
+      i.blocks.add(layer_1_lvl_asset.impassable)
+      i.blocks.add(layer_2_lvl_asset.impassable)
+      i.world_size = world_size
+      i.rect = i.image.get_rect()
 
-    # The assets the player can not go through
     player.blocks.add(world_lvl_asset.impassable)
     player.blocks.add(layer_1_lvl_asset.impassable)
     player.blocks.add(layer_2_lvl_asset.impassable)
-    enemy.blocks.add(world_lvl_asset.impassable)
-    enemy.blocks.add(layer_1_lvl_asset.impassable)
-    enemy.blocks.add(layer_2_lvl_asset.impassable)
-
-    # Set sizing options for the player
+    
+    
+  
     player.world_size = world_size
     player.rect = player.image.get_rect()
-    enemy.world_size = world_size
-    enemy.rect = enemy.image.get_rect()
-    enemy_2.world_size = world_size
-    enemy_2.rect = enemy.image.get_rect()
+       
 
-    # Add the player to the engine
+    # Adds the player, enemies, and NPCs to the game
     engine.objects.append(player)
     engine.drawables.add(player)
-    engine.objects.append(enemy)
-    engine.drawables.add(enemy)
-    engine.objects.append(enemy_2)
-    engine.drawables.add(enemy_2)
-    engine.drawables.add(player_overlay)
-
-    # Add the NPCs to the engine
-    # engine.objects.append(npcBlacksmith)
-    engine.objects.append(npcBlacksmith)
-    engine.drawables.add(npcBlacksmith)
-    engine.objects.append(npcAlchemist)
-    engine.drawables.add(npcAlchemist)
-    engine.objects.append(npcArmorer)
-    engine.drawables.add(npcArmorer)
-
+    engine.objects.extend(enemies)
+    engine.drawables.add(enemies)
+    engine.objects.extend(npcList)
+    engine.drawables.add(npcList)
+  
+   
     # interface for the turn system
     turns = Turns(player, enemies, engine)
 
@@ -110,6 +112,8 @@ def main():
     engine.key_events[pygame.K_3] = turns.attack_3
     engine.key_events[pygame.K_4] = turns.attack_4
     engine.key_events[pygame.K_5] = turns.attack_5
+
+    engine.key_events[pygame.K_i] = player.playerInventory
 
     engine.key_events[pygame.K_m] = player.change_layers
     # Need to add when near each vendor, e opens the inventory menu

@@ -34,6 +34,28 @@ class Player(Character, Handle_Animations, Change_Scene):
         self.y = y
         self.z = 0
 
+
+        # Image for the background behing the inventory image
+        # TODO: Possibly change this? Just thought it looked cool so i threw that boy in
+        # Feel free to change up
+        self.inventoryScreenBackground = pygame.image.load('./assets/inventoryScreenBackground.png')
+
+        # Loads all the icons for the items in the inventory
+        # Organized like this in the inventory
+        # 1-2-3     7-8-9
+        # 4-5-6    10-11-12
+        self.inventoryBackground = pygame.image.load('./assets/inventory.png')
+        self.inventoryBackground = pygame.transform.scale(self.inventoryBackground, (400, 200))
+
+        self.IconOne = pygame.image.load('./assets/ax.png').convert_alpha()
+        self.IconOne = pygame.transform.scale(self.IconOne,(64, 64))
+
+        self.IconTwo = pygame.image.load('./assets/bluesword.png').convert_alpha()
+        self.IconTwo = pygame.transform.scale(self.IconTwo,(64, 64))
+
+        self.IconThree = pygame.image.load('./assets/bow.png').convert_alpha()
+        self.IconThree = pygame.transform.scale(self.IconTwo,(64, 64))
+
         # images to pull from
         self.sprites_to_use = sprites_to_use
 
@@ -395,3 +417,127 @@ class Player(Character, Handle_Animations, Change_Scene):
             self.y = 300
             pygame.display.flip()
         # self.Change_Scene(300, 200, './assets/scene2layer1.lvl', './assets/scene2layer2.lvl')
+
+
+    def playerInventory(self, time):
+    
+        screen = pygame.display.set_mode((800, 600))
+
+        # Sets the screen to the background image
+        screen.blit(self.inventoryScreenBackground, (0,0))
+        screen.blit(self.inventoryBackground, (180, 140))
+
+        # Variables for x and y coords for the selector
+        x = 189
+        y = 145
+
+        # Variable for the dimension sizes of the interactive boxes
+        interactiveBoxDimensionsX = 40
+        interactiveBoxDimensionsY = 40
+
+        self.npcCollisionCheck = True
+
+        clock = pygame.time.Clock()
+
+        # RGB values for grey
+        grey = (96, 96, 96)
+
+        # Creates all the interactive rectangles. I made these so i can control when the user click on our image
+        # Creates them for the Npc inventory and the players inventory
+        # TODO:Add all the dialog options
+        # TODO:Need to fix formatting slightly, not sure why they got messsed up
+        interactiveIconOne = pygame.Rect(190, 160, interactiveBoxDimensionsX, interactiveBoxDimensionsY)
+        interactiveIconTwo = pygame.Rect(260, 160, interactiveBoxDimensionsX, interactiveBoxDimensionsY)
+        interactiveIconThree = pygame.Rect(320, 160, interactiveBoxDimensionsX, interactiveBoxDimensionsY)
+      
+        myInventory = pygame.Rect(600, 125, 30, 30)
+        dialogOptions = pygame.Rect(375, 425, 30, 30)
+
+        # Creates an array that holds all the possible choices for user
+        # TODO:Add the remaining choices
+        options = [myInventory, dialogOptions, interactiveIconOne, interactiveIconTwo, interactiveIconThree]
+
+        # Selector. Going to change this to an image...whenever i figure out how the fuck to do that
+        # Currently having it spawn in the top left of the screen
+        selector = pygame.Rect(185, 145, 10, 10)
+
+        # Checks if the player has collided with the NPC
+        # Sets the movement for the selector
+        # TODO:Add functionality for the mouse and not the keyboard for cursor movement
+        while self.npcCollisionCheck:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.npcCollisionCheck = True
+
+            pressed = pygame.key.get_pressed()
+            if pressed[pygame.K_w] and y > 0:
+                y -= 5
+            if pressed[pygame.K_s] and y < 600 - 60:
+                y += 5
+            if pressed[pygame.K_a] and x > 0:
+                x -= 5
+            if pressed[pygame.K_d] and x < 800 - 60:
+                x += 5
+
+            # Selector x and y
+            selector.x, selector.y = x, y
+
+            #screen.fill((0, 0, 0))
+
+            # Color for the selector
+            color = (0, 128, 255)
+
+            # Draws all the rects that are our interactive box
+            # IMPORTANT:Make sure all of the interactive boxes
+            # are drawn before the selector and icon images
+            # otherwise they will overlap.
+            pygame.draw.rect(screen, grey, interactiveIconOne)
+            pygame.draw.rect(screen, grey, interactiveIconTwo)
+            pygame.draw.rect(screen, grey, interactiveIconThree) 
+            #pygame.draw.rect(screen, grey, dialogOptions)
+            pygame.draw.rect(screen, grey, myInventory)
+
+            # Blits all the images of the item icons on the the respective spots
+            # TODO: Maybe make this cleaner if we have time? nahhh im lazy who cares
+            screen.blit(self.IconOne, (185, 145))
+            screen.blit(self.IconTwo, (240, 145))
+            screen.blit(self.IconThree, (300, 145))
+            
+
+            # Font for when printing text
+            # TODO:Will be used in the future for dialog and text in general in menu
+            # Will be adding more fonts for different things
+            font = pygame.font.SysFont("monospace", 25)
+
+            # # Text for NPC Inventory
+            # npcInventory = font.render("NPC INVENTORY", 1, (255, 255, 255))
+            # screen.blit(npcInventory, (185, 100))
+            # Text for Player Iventory
+            playerInventory = font.render("PLAYER INVENTORY", 1, (255, 255, 255))
+            screen.blit(playerInventory, (220, 100))
+
+            # Draws our selector
+            pygame.draw.rect(screen, color, selector)
+
+
+            # Check to see if the user presses the enter key
+            # TODO:Make it so it is all clicking interactions from the mouse
+            if pressed[pygame.K_RETURN]:
+                # Check to see if the selection rect
+                # collides with any other rect
+                for rect in options:
+                    # Add rects as needed
+                    if selector.colliderect(rect):
+                        if rect == interactiveIconOne:
+                            print('interact1!')
+                        elif rect == interactiveIconTwo:
+                            print('2')
+                        elif rect == interactiveIconThree:
+                            print('3')
+                        elif rect == myInventory:
+                        
+                            self.npcCollisionCheck = True
+
+            pygame.display.flip()
+            clock.tick(60)
+ 

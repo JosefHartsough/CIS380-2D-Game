@@ -31,8 +31,8 @@ class Attack_Damage(IntEnum):
     """
     These are the values for each attack
     """
-    FIRST_ATTACK = 10
+    FIRST_ATTACK = 1000
     SECOND_ATTACK = 50
     THIRD_ATTACK = 30
     FOURTH_ATTACK = 10
-    FIFTH_ATTACK = 250
+    FIFTH_ATTACK = 2500
