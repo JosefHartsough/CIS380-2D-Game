@@ -34,6 +34,7 @@ class Enemy(Character, Handle_Animations, Change_Scene):
         self.y = y
         self.z = 0
 
+       
         # images to pull from
         self.sprites_to_use = sprites_to_use
 
@@ -265,16 +266,6 @@ class Enemy(Character, Handle_Animations, Change_Scene):
         except:
             pass
 
-    def update(self, time):
-        self.rect.x = self.x
-        self.rect.y = self.y
-        self.collisions = []
-        for sprite in self.blocks:
-            self.collider.rect.x = sprite.x
-            self.collider.rect.y = sprite.y
-            if pygame.sprite.collide_rect(self, self.collider):
-                self.collisions.append(sprite)
-
     def choose_attack(self, time):
         if self.attack_to_animate == 1:
             self.attack_1(time)
@@ -400,21 +391,13 @@ class Enemy(Character, Handle_Animations, Change_Scene):
             self.y = self.before_y
             self.has_not_hit_5 = True
 
-    def change_layers(self, time):
-        if (self.x > 400 and self.x < 450) and (self.y < 20):
-            self.blocks.remove(self.layer_1_lvl_asset.impassable)
-            self.blocks.remove(self.layer_2_lvl_asset.impassable)
-            self.layer_1_lvl_asset = league.Tilemap(
-                './assets/scene2layer1.lvl', self.sprites, layer=1)
-            self.layer_2_lvl_asset = league.Tilemap(
-                './assets/scene2layer2.lvl', self.sprites, layer=2)
-            self.engine.drawables.add(
-                self.layer_1_lvl_asset.passable.sprites())
-            self.blocks.add(self.layer_1_lvl_asset.impassable)
-            self.engine.drawables.add(
-                self.layer_2_lvl_asset.passable.sprites())
-            self.blocks.add(self.layer_2_lvl_asset.impassable)
-            self.x = 200
-            self.y = 300
-            pygame.display.flip()
-        # self.Change_Scene(300, 200, './assets/scene2layer1.lvl', './assets/scene2layer2.lvl')
+    
+    def update(self, time):
+        self.rect.x = self.x
+        self.rect.y = self.y
+        self.collisions = []
+        for sprite in self.blocks:
+            self.collider.rect.x = sprite.x
+            self.collider.rect.y = sprite.y
+            if pygame.sprite.collide_rect(self, self.collider):
+                self.collisions.append(sprite)
